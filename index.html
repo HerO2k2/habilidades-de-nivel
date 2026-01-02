@@ -562,7 +562,7 @@ const SKILLS_DB = {
             {
                 nome: "Pássaro de Papel: Shikigami",
                 tipo: "Ativa",
-                desc: "Invoca um familiar indestrutível que ataca com você. Permanece até ser cancelado ou o usuário cair. Não pode ser usda junto da [Possessão Shikigami]",
+                desc: "Invoca um familiar indestrutível que ataca com você. Permanece até ser cancelado ou o usuário cair. Não pode ser usada junto da [Possessão Shikigami]",
                 dano: "1d6+Ocu",
                 cd: "1 Combate"
             },
@@ -594,7 +594,7 @@ const SKILLS_DB = {
             {
                 nome: "Possessão Shikigami",
                 tipo: "Ativa",
-                desc: "[Requer Shikigami] Funde-se ao seu familiar, ganhando +2 em Luta, Ocultismo, Atletismo, Acrobacia e Reflexo.",
+                desc: "[Requer Shikigami] Funde-se ao seu familiar, ganhando +3 em Luta, Ocultismo, Atletismo, Acrobacia e Reflexo.",
                 dano: "Self-Buff",
                 cd: "1 Combate"
             },
@@ -610,7 +610,7 @@ const SKILLS_DB = {
             {
                 nome: "Dança do Deus do Fogo",
                 tipo: "Ativa",
-                desc: "[Requer Possessão] Manifesta chamas em mãos e pés. Seus ataques passam a causar dano de Queimadura.",
+                desc: "[Requer Possessão] Manifesta chamas em mãos e pés. Seus ataques passam a causar dano de Queimadura. Ganha +4 de dano fixo",
                 dano: "Queimadura",
                 cd: "1 Combate"
             },
@@ -649,8 +649,8 @@ const SKILLS_DB = {
             {
                 nome: "Domínio Espiritual do Fogo",
                 tipo: "Passiva",
-                desc: "[Requer Dança do Deus do Fogo] Espíritos inferiores não te atacam. Causa dano passivo de fogo contra Yokais.",
-                dano: "1d12 Queim",
+                desc: "[Requer Dança do Deus do Fogo] Espíritos inferiores não te atacam. Causa dano extra passivo de fogo contra Yokais.",
+                dano: "2d12 Queim",
                 cd: "-"
             }
         ]
@@ -861,7 +861,7 @@ const SKILLS_DB = {
             {
                 nome: "Aproveitador Silencioso",
                 tipo: "Passiva",
-                desc: "Sua velocidade é absurda. Você ganha +1 ação de combate e +1 ação de movimento por turno.",
+                desc: "Sua velocidade é absurda. Você ganha +1 ação de combate e +1 ação de movimento por turno. Inimigos ignoram Taunt de aliados e passam a focar apenas em você",
                 dano: "Extra Ação",
                 cd: "-"
             }
