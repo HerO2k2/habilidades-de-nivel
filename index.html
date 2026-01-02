@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>🧬 Ancestrais — RPG</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+<style>
+body{
+    background:#05070c;
+    color:#e0e6ff;
+    font-family:'VT323', monospace;
+    font-size:20px;
+    margin:20px;
+}
+h1{ text-align:center; margin-bottom:40px; text-shadow: 0 0 10px #4ceaff; }
+
+/* ===== CORES POR CATEGORIA ===== */
+.lutador{--c:#ff4c4c;}
+.subtank{--c:#ffd84c;}
+.controle{--c:#6ccfff;}
+.tank{--c:#ff9c4c;}
+.curandeiro{--c:#4cff88;}
+.invocador{--c:#b96cff;}
+.cultista{--c:#00eaff;}
+.suporte{--c:#ff55ff;} /* ALTERADO PARA MAGENTA */
+
+.ancestral{
+    border:3px solid var(--c);
+    box-shadow:0 0 18px color-mix(in srgb, var(--c) 40%, transparent);
+    padding:20px;
+    margin-bottom:45px;
+    background:#0a0e1b;
+}
+.ancestral h2{ margin:0 0 5px 0; color:var(--c); text-transform: uppercase; letter-spacing: 2px; font-size: 32px;}
+.desc{ font-size:18px; color:#b5bcff; margin-bottom:20px; font-style: italic; opacity: 0.8; border-bottom: 1px dashed #333; padding-bottom: 10px;}
+
+/* ===== NÍVEL ===== */
+.level{ border-top:1px dashed #3c4270; margin-top:20px; padding-top:15px; }
+.level h3{ color:#9da8ff; margin-bottom:15px; font-size: 24px;}
+
+/* ===== SKILL ===== */
+.skill{ display:grid; grid-template-columns:40px 1fr; gap:12px; margin-bottom:20px; }
+
+/* Checkbox */
+.check{ width:30px; height:30px; border:2px solid var(--c); cursor:pointer; position: relative;}
+.check input{display:none;}
+.check span{ display:block; width:100%; height:100%; transition: 0.2s;}
+.check input:checked + span{ background:var(--c); box-shadow: inset 0 0 5px rgba(0,0,0,0.5);}
+
+/* Conteúdo */
+.skill-content{
+    display:grid; 
+    grid-template-columns:1fr auto auto; 
+    gap:5px 15px; 
+    align-items:start;
+}
+.skill-name{ grid-column:1/4; font-size: 22px; font-weight: bold; color: #fff; }
+.tipo{ font-size: 18px; opacity: 0.9; font-weight: normal; margin-left: 10px; }
+.skill-desc{ grid-column: 1/4; font-size:18px; color:#d6dbff; line-height: 1.4; margin-top: 5px;}
+
+.stats-box {
+    grid-column: 1/4;
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+    font-size: 18px;
+    border-top: 1px solid #3c4270;
+    padding-top: 5px;
+}
+.dano{ color:#ff6b6b; }
+.cd{ color:#4ceaff; }
+
+/* ===== TIER LIST ===== */
+.tier-section {
+    margin-top: 60px;
+    border: 3px solid #fff;
+    padding: 20px;
+    background: #0f121f;
+}
+.tier-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 10px;
+}
+.tier-controls select {
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    padding: 5px;
+}
+.tier-row {
+    display: flex;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+    background: #000;
+}
+.tier-rank {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #000;
+}
+.tier-content {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+.tier-item { font-size: 22px; color: #e0e6ff; text-shadow: 0 0 5px #000; }
+.rank-s { background: #ff4c4c; }
+.rank-a { background: #ffd84c; }
+.rank-b { background: #6ccfff; }
+.rank-c { background: #4cff88; }
+
+</style>
+</head>
+<body>
+
+<h1>🧬 ANCESTRAIS — HABILIDADES</h1>
+
+<script>
+// =================================================================
+// BANCO DE DADOS COMPLETO (20 CLASSES)
+// =================================================================
+const SKILLS_DB = {
+    "cacador": { // Antigo Arqueiro/Atirador
+        1: [{ nome: "Olhos de Águia", tipo: "Passiva", desc: "Visão ampliada e precisão extrema. +2 em testes de Percepção e Pontaria.", dano: "-", cd: "-" }, { nome: "Disparo Perfurante", tipo: "Ativa", desc: "Disparo que ignora 2 pontos de defesa. Se o alvo estiver a mais de 10m, causa dano extra.", dano: "1d8+2", cd: "2 Turnos" }],
+        2: [{ nome: "Rastreamento", tipo: "Passiva", desc: "Identifica pegadas e trilhas. Vantagem em Sobrevivência para caça.", dano: "-", cd: "-" }, { nome: "Armadilha de Corda", tipo: "Ativa", desc: "Prende um inimigo que passar pelo local. Ele fica Imóvel por 1 turno.", dano: "-", cd: "1 Combate" }],
+        3: [{ nome: "Camuflagem", tipo: "Passiva", desc: "+2 em Furtividade em ambientes naturais.", dano: "-", cd: "-" }, { nome: "Chuva de Flechas", tipo: "Ativa", desc: "Ataque em área (3m). Atinge todos os inimigos no raio.", dano: "2d6", cd: "3 Turnos" }],
+        4: [{ nome: "Predador", tipo: "Passiva", desc: "Dano aumentado contra bestas e animais.", dano: "+1d6", cd: "-" }, { nome: "Tiro no Joelho", tipo: "Ativa", desc: "Reduz o deslocamento do alvo a 0.", dano: "1d6+Slow", cd: "2 Turnos" }],
+        5: [{ nome: "Foco Absoluto", tipo: "Passiva", desc: "Se não se mover, ganha +2 no acerto.", dano: "-", cd: "-" }, { nome: "Flecha Explosiva", tipo: "Ativa", desc: "Disparo com ponta explosiva.", dano: "3d6 Área", cd: "1 Combate" }],
+        6: [{ nome: "Instinto Assassino", tipo: "Passiva", desc: "Críticos causam 3x o dano em vez de 2x.", dano: "Crit x3", cd: "-" }, { nome: "Disparo Duplo", tipo: "Ativa", desc: "Realiza dois ataques com uma ação.", dano: "2x 1d8", cd: "1 Rodada" }],
+        7: [{ nome: "Mestre da Caça", tipo: "Passiva", desc: "Nunca é surpreendido. Iniciativa +5.", dano: "-", cd: "-" }, { nome: "Tiro Letal", tipo: "Ativa", desc: "Se o alvo tiver menos de 20% de vida, morre instantaneamente (exceto Boss).", dano: "Morte", cd: "1 Sessão" }],
+        8: [{ nome: "Lenda da Floresta", tipo: "Passiva", desc: "Regenera 1d6 PV por turno em terreno natural.", dano: "Regen", cd: "-" }, { nome: "Flecha Fantasma", tipo: "Ativa", desc: "Atravessa paredes e obstáculos para atingir o alvo.", dano: "4d8", cd: "1 Combate" }]
+    },
+    "lider": { // Militar Suporte
+        1: [{ nome: "Voz de Comando", tipo: "Ativa", desc: "Aliado ganha +1d4 no próximo teste.", dano: "Buff", cd: "1 Rodada" }, { nome: "Presença Inspiradora", tipo: "Passiva", desc: "Aliados em 5m ganham +1 em Vontade.", dano: "-", cd: "-" }],
+        2: [{ nome: "Reagrupar", tipo: "Ativa", desc: "Todos os aliados podem se mover 3m sem levar ataque de oportunidade.", dano: "Move", cd: "1 Combate" }, { nome: "Tático", tipo: "Passiva", desc: "Pode usar INT para iniciativa.", dano: "-", cd: "-" }],
+        3: [{ nome: "Fogo Concentrado", tipo: "Ativa", desc: "Marca um alvo. Todos ganham +2 dano contra ele.", dano: "Marca", cd: "2 Rodadas" }, { nome: "Disciplina", tipo: "Passiva", desc: "Imune a medo.", dano: "-", cd: "-" }],
+        4: [{ nome: "Grito de Guerra", tipo: "Ativa", desc: "Inimigos em 5m testam Vontade ou ficam Abalados (-2 atk).", dano: "Debuff", cd: "1 Combate" }, { nome: "Veterano", tipo: "Passiva", desc: "+2 em História e Tática.", dano: "-", cd: "-" }],
+        5: [{ nome: "Manobra Ofensiva", tipo: "Ativa", desc: "Um aliado faz um ataque extra agora.", dano: "Ação Extra", cd: "1 Combate" }, { nome: "Exemplo", tipo: "Passiva", desc: "Quando você crita, aliados curam 1d6.", dano: "Cura", cd: "-" }],
+        6: [{ nome: "Ordem de Proteção", tipo: "Ativa", desc: "Um aliado ganha resistência a dano físico por 1 turno.", dano: "Defesa", cd: "1 Combate" }, { nome: "Estrategista", tipo: "Passiva", desc: "Grupo ganha +2 em Iniciativa.", dano: "-", cd: "-" }],
+        7: [{ nome: "Moral Elevada", tipo: "Ativa", desc: "Todos os aliados ganham +10 PV temporários.", dano: "Shield", cd: "1 Sessão" }, { nome: "Comandante", tipo: "Passiva", desc: "Sua área de comando aumenta para 10m.", dano: "-", cd: "-" }],
+        8: [{ nome: "Avanço Final", tipo: "Ativa", desc: "Todos os aliados ganham Vantagem e +1d8 dano por 1 turno.", dano: "Super Buff", cd: "1 Sessão" }, { nome: "Lenda Viva", tipo: "Passiva", desc: "Aliados nunca falham em testes de Medo perto de você.", dano: "Aura", cd: "-" }]
+    },
+    "xama": { // Curandeiro Tribal
+        1: [{ nome: "Toque da Natureza", tipo: "Ativa", desc: "Cura 1d8+Sab PV.", dano: "Cura", cd: "1 Rodada" }, { nome: "Espírito Guia", tipo: "Passiva", desc: "+2 em Sobrevivência.", dano: "-", cd: "-" }],
+        2: [{ nome: "Raízes Prisão", tipo: "Ativa", desc: "Prende inimigo (Reflexo anula).", dano: "Imóvel", cd: "2 Turnos" }, { nome: "Totem de Cura", tipo: "Ativa", desc: "Totem cura 1d4 em área por 3 turnos.", dano: "Cura/Turno", cd: "1 Combate" }],
+        3: [{ nome: "Pele de Carvalho", tipo: "Ativa", desc: "Aliado ganha +2 Defesa.", dano: "Buff Def", cd: "1 Combate" }, { nome: "Conexão", tipo: "Passiva", desc: "Sente perturbações naturais.", dano: "-", cd: "-" }],
+        4: [{ nome: "Enxame de Insetos", tipo: "Ativa", desc: "Dano em cone e distração.", dano: "2d6", cd: "1 Combate" }, { nome: "Harmonia", tipo: "Passiva", desc: "Recupera 1 PE ao curar crítico.", dano: "-", cd: "-" }],
+        5: [{ nome: "Chuva Restauradora", tipo: "Ativa", desc: "Cura todos aliados em 2d6.", dano: "Cura Área", cd: "1 Sessão" }, { nome: "Forma Bestial", tipo: "Ativa", desc: "Transforma-se em lobo (Atk corpo a corpo).", dano: "Transf.", cd: "1 Sessão" }],
+        6: [{ nome: "Fúria dos Elementos", tipo: "Ativa", desc: "3d8 dano de fogo/gelo em alvo.", dano: "3d8", cd: "2 Turnos" }, { nome: "Ancestralidade", tipo: "Passiva", desc: "+1 dado de cura.", dano: "-", cd: "-" }],
+        7: [{ nome: "Ressurreição Natural", tipo: "Ativa", desc: "Revive aliado morto recentemente com 1 PV.", dano: "Reviver", cd: "1 Sessão" }, { nome: "Vigor da Terra", tipo: "Passiva", desc: "Imune a veneno e doença.", dano: "-", cd: "-" }],
+        8: [{ nome: "Avatar da Natureza", tipo: "Ativa", desc: "Vira um Ente gigante por 3 turnos.", dano: "God Mode", cd: "1 Sessão" }, { nome: "Equilíbrio", tipo: "Passiva", desc: "Se causar dano, cura aliados próximos igual ao dano.", dano: "Vampirismo", cd: "-" }]
+    },
+    "onmyoji": {
+        1: [{ nome: "Ofuda Explosivo", tipo: "Ativa", desc: "Arremessa selo mágico: 1d6+OCU dano.", dano: "1d6", cd: "1 Turno" }, { nome: "Visão Espiritual", tipo: "Passiva", desc: "Vê espíritos e invisíveis.", dano: "-", cd: "-" }],
+        2: [{ nome: "Shikigami de Papel", tipo: "Ativa", desc: "Invoca servo com 5PV que ataca.", dano: "1d4", cd: "1 Combate" }, { nome: "Barreira", tipo: "Ativa", desc: "Escudo de 10 PV em aliado.", dano: "Shield", cd: "2 Turnos" }],
+        3: [{ nome: "Selo de Paralisia", tipo: "Ativa", desc: "Inimigo testa Vontade ou paralisa 1 turno.", dano: "Stun", cd: "3 Turnos" }, { nome: "Karma", tipo: "Passiva", desc: "Quem te ataca sofre 1d4 dano.", dano: "Refletir", cd: "-" }],
+        4: [{ nome: "Invocação: Oni", tipo: "Ativa", desc: "Ogro vermelho, 20PV, Atk 1d10.", dano: "Summon", cd: "1 Sessão" }, { nome: "Purificação", tipo: "Ativa", desc: "Remove maldições e condições.", dano: "Cleanse", cd: "1 Combate" }],
+        5: [{ nome: "Pentagrama", tipo: "Ativa", desc: "Área que causa 2d6 em inimigos dentro.", dano: "2d6 Área", cd: "1 Combate" }, { nome: "Sincronia", tipo: "Passiva", desc: "Shikigamis ganham +2 Atk/Def.", dano: "-", cd: "-" }],
+        6: [{ nome: "Troca Espiritual", tipo: "Ativa", desc: "Troca de lugar com um Shikigami.", dano: "Teleport", cd: "1 Turno" }, { nome: "Dreno de Alma", tipo: "Ativa", desc: "3d6 dano, cura metade.", dano: "3d6+Cura", cd: "1 Combate" }],
+        7: [{ nome: "Invocação: Dragão", tipo: "Ativa", desc: "Invoca dragão espiritual em linha.", dano: "4d10", cd: "1 Sessão" }, { nome: "Mestre dos Selos", tipo: "Passiva", desc: "Pode usar 2 Ofudas por turno.", dano: "Double", cd: "-" }],
+        8: [{ nome: "Portão do Submundo", tipo: "Ativa", desc: "Suga inimigos (Morte ou 5d10).", dano: "Morte/Dano", cd: "1 Sessão" }, { nome: "Reencarnação", tipo: "Passiva", desc: "Se morrer, volta como espírito por 1 hora.", dano: "Ghost", cd: "-" }]
+    },
+    "samurai": {
+        1: [{ nome: "Corte Rápido", tipo: "Ativa", desc: "Ataque com iniciativa extra.", dano: "1d8", cd: "1 Turno" }, { nome: "Honra", tipo: "Passiva", desc: "+2 Vontade.", dano: "-", cd: "-" }],
+        2: [{ nome: "Contra-Ataque", tipo: "Ativa", desc: "Prepara defesa. Se atacado, revida.", dano: "1d10", cd: "1 Rodada" }, { nome: "Foco", tipo: "Passiva", desc: "+1 acerto com Katanas.", dano: "-", cd: "-" }],
+        3: [{ nome: "Iaijutsu", tipo: "Ativa", desc: "Saque rápido. Dano dobrado se for 1º ataque.", dano: "2d8", cd: "1 Combate" }, { nome: "Kiai", tipo: "Ativa", desc: "Grito que amedronta inimigos.", dano: "Fear", cd: "1 Combate" }],
+        4: [{ nome: "Lâmina de Vento", tipo: "Ativa", desc: "Ataque à distância (vácuo).", dano: "1d8", cd: "2 Turnos" }, { nome: "Bushido", tipo: "Passiva", desc: "Imune a charme/medo.", dano: "-", cd: "-" }],
+        5: [{ nome: "Corte em Cruz", tipo: "Ativa", desc: "Dois ataques em um.", dano: "2d10", cd: "3 Turnos" }, { nome: "Zanshin", tipo: "Passiva", desc: "Sempre alerta. Nunca surpreso.", dano: "-", cd: "-" }],
+        6: [{ nome: "Sangramento", tipo: "Passiva", desc: "Críticos causam sangramento.", dano: "DoT", cd: "-" }, { nome: "Meditação", tipo: "Ativa", desc: "Recupera PV e remove fadiga.", dano: "Cura", cd: "1 Sessão" }],
+        7: [{ nome: "Golpe Fantasma", tipo: "Ativa", desc: "Ignora armadura.", dano: "3d8", cd: "1 Combate" }, { nome: "Mestre da Espada", tipo: "Passiva", desc: "Rola dano 2 vezes e pega o melhor.", dano: "Vantagem", cd: "-" }],
+        8: [{ nome: "Flor da Morte", tipo: "Ativa", desc: "Ataca todos inimigos ao alcance.", dano: "4d10", cd: "1 Sessão" }, { nome: "Lenda", tipo: "Passiva", desc: "Se cair a 0 PV, luta mais 1 turno.", dano: "Imortal", cd: "-" }]
+    },
+    "ninja": {
+        1: [{ nome: "Shuriken", tipo: "Ativa", desc: "Arremessa 2 shurikens.", dano: "1d4 cada", cd: "1 Turno" }, { nome: "Passo Leve", tipo: "Passiva", desc: "Movimento silencioso.", dano: "-", cd: "-" }],
+        2: [{ nome: "Bomba de Fumaça", tipo: "Ativa", desc: "Foge ou se esconde.", dano: "Furtividade", cd: "1 Combate" }, { nome: "Ataque Furtivo", tipo: "Passiva", desc: "+1d6 dano se oculto.", dano: "+1d6", cd: "-" }],
+        3: [{ nome: "Clone das Sombras", tipo: "Ativa", desc: "Cria 1 clone ilusório que distrai.", dano: "-", cd: "1 Combate" }, { nome: "Escalada", tipo: "Passiva", desc: "Anda em paredes.", dano: "-", cd: "-" }],
+        4: [{ nome: "Veneno", tipo: "Ativa", desc: "Aplica veneno na arma.", dano: "1d4/turno", cd: "1 Combate" }, { nome: "Esquiva Sobrenatural", tipo: "Passiva", desc: "Reduz dano de área pela metade.", dano: "-", cd: "-" }],
+        5: [{ nome: "Assassinato", tipo: "Ativa", desc: "Dano massivo em alvo surpreso.", dano: "4d6", cd: "1 Combate" }, { nome: "Mestre das Sombras", tipo: "Passiva", desc: "Fica invisível na penumbra.", dano: "-", cd: "-" }],
+        6: [{ nome: "Teleporte Curto", tipo: "Ativa", desc: "Move-se instantaneamente 10m.", dano: "-", cd: "2 Turnos" }, { nome: "Golpe Vital", tipo: "Passiva", desc: "Crítico em 19-20.", dano: "-", cd: "-" }],
+        7: [{ nome: "Execução", tipo: "Ativa", desc: "Mata alvo com <10 PV.", dano: "Morte", cd: "-" }, { nome: "Lótus Oculta", tipo: "Ativa", desc: "Combo aéreo.", dano: "3d8", cd: "1 Combate" }],
+        8: [{ nome: "Sombra Viva", tipo: "Passiva", desc: "Se esquivar, fica invisível.", dano: "-", cd: "-" }, { nome: "Ninjutsu Final", tipo: "Ativa", desc: "Dano massivo em área.", dano: "5d8", cd: "1 Sessão" }]
+    },
+    "mongol": {
+        1: [{ nome: "Montaria", tipo: "Passiva", desc: "Começa com cavalo/moto. +2 Atk montado.", dano: "-", cd: "-" }, { nome: "Arco Composto", tipo: "Ativa", desc: "Tiro montado sem penalidade.", dano: "1d8", cd: "-" }],
+        2: [{ nome: "Investida", tipo: "Ativa", desc: "Corre e ataca com bônus.", dano: "1d10+2", cd: "1 Turno" }, { nome: "Sobrevivente", tipo: "Passiva", desc: "+2 Fortitude.", dano: "-", cd: "-" }],
+        3: [{ nome: "Laço", tipo: "Ativa", desc: "Prende alvo.", dano: "Imóvel", cd: "2 Turnos" }, { nome: "Saqueador", tipo: "Passiva", desc: "Encontra mais itens/dinheiro.", dano: "-", cd: "-" }],
+        4: [{ nome: "Grito da Horda", tipo: "Ativa", desc: "Buff de velocidade p/ grupo.", dano: "Speed", cd: "1 Combate" }, { nome: "Tiro Partida", tipo: "Ativa", desc: "Ataca enquanto foge.", dano: "1d8", cd: "1 Turno" }],
+        5: [{ nome: "Pele de Ferro", tipo: "Passiva", desc: "RD 2 contra físico.", dano: "-", cd: "-" }, { nome: "Atropelar", tipo: "Ativa", desc: "Dano ao passar por cima.", dano: "2d8", cd: "1 Turno" }],
+        6: [{ nome: "Chuva de Flechas", tipo: "Ativa", desc: "Atk em cone.", dano: "2d6", cd: "1 Combate" }, { nome: "Khan", tipo: "Passiva", desc: "Aliados montados ganham +2.", dano: "-", cd: "-" }],
+        7: [{ nome: "Imparável", tipo: "Ativa", desc: "Remove lentidão/paralisia.", dano: "Cleanse", cd: "1 Combate" }, { nome: "Resistência Lendária", tipo: "Passiva", desc: "+20 PV Max.", dano: "-", cd: "-" }],
+        8: [{ nome: "Conquistador", tipo: "Ativa", desc: "Dano triplicado em estruturas/veículos.", dano: "Siege", cd: "-" }, { nome: "Espírito da Estepe", tipo: "Passiva", desc: "Regenera vida se mover.", dano: "Regen", cd: "-" }]
+    },
+    "militar": {
+        1: [{ nome: "Treinamento Básico", tipo: "Passiva", desc: "+1 acerto armas fogo.", dano: "-", cd: "-" }, { nome: "Rajada", tipo: "Ativa", desc: "3 tiros, -2 acerto, +1d6 dano.", dano: "+1d6", cd: "1 Turno" }],
+        2: [{ nome: "Cobertura", tipo: "Ativa", desc: "Aumenta defesa se imóvel.", dano: "+4 Def", cd: "-" }, { nome: "Granada Frag", tipo: "Ativa", desc: "Explosão pequena.", dano: "2d6", cd: "1 Combate" }],
+        3: [{ nome: "Kit Médico", tipo: "Ativa", desc: "Cura ferimento leve.", dano: "1d8", cd: "1 Combate" }, { nome: "Colete", tipo: "Passiva", desc: "+2 Defesa contra balas.", dano: "-", cd: "-" }],
+        4: [{ nome: "Supressão", tipo: "Ativa", desc: "Inimigos na área ganham -2 Atk.", dano: "Debuff", cd: "1 Turno" }, { nome: "Recarregar Rápido", tipo: "Passiva", desc: "Recarrega como ação livre.", dano: "-", cd: "-" }],
+        5: [{ nome: "Tiro de Precisão", tipo: "Ativa", desc: "Mira por 1 turno, dano max.", dano: "Max Dmg", cd: "2 Turnos" }, { nome: "Disciplina de Ferro", tipo: "Passiva", desc: "Imune a controle mental.", dano: "-", cd: "-" }],
+        6: [{ nome: "Lança-Granadas", tipo: "Ativa", desc: "Explosão média.", dano: "3d8", cd: "1 Combate" }, { nome: "Pelotão", tipo: "Passiva", desc: "+1 Def por aliado adjacente.", dano: "-", cd: "-" }],
+        7: [{ nome: "Juggernaut", tipo: "Ativa", desc: "Reduz todo dano pela metade por 2 turnos.", dano: "50% Res", cd: "1 Sessão" }, { nome: "Arsenal", tipo: "Passiva", desc: "Pode carregar 3 armas principais.", dano: "-", cd: "-" }],
+        8: [{ nome: "Ataque Aéreo", tipo: "Ativa", desc: "Chama bombardeio.", dano: "6d10", cd: "1 Sessão" }, { nome: "Último Homem", tipo: "Passiva", desc: "Dobra dano se for o único em pé.", dano: "Dobro", cd: "-" }]
+    },
+    "cavaleiro": {
+        1: [{ nome: "Escudo Torre", tipo: "Passiva", desc: "+3 Defesa com escudo.", dano: "-", cd: "-" }, { nome: "Provocar", tipo: "Ativa", desc: "Obriga inimigo a te atacar.", dano: "Taunt", cd: "1 Turno" }],
+        2: [{ nome: "Armadura Pesada", tipo: "Passiva", desc: "RD 3 físico, -2 Desloc.", dano: "-", cd: "-" }, { nome: "Golpe de Escudo", tipo: "Ativa", desc: "Dano + empurrão.", dano: "1d4+Push", cd: "1 Turno" }],
+        3: [{ nome: "Guardião", tipo: "Ativa", desc: "Recebe dano no lugar de adjacente.", dano: "Protect", cd: "Reação" }, { nome: "Vigor", tipo: "Passiva", desc: "+1 PV por nível.", dano: "-", cd: "-" }],
+        4: [{ nome: "Desarmar", tipo: "Ativa", desc: "Tira arma do inimigo.", dano: "-", cd: "1 Combate" }, { nome: "Baluarte", tipo: "Passiva", desc: "Não pode ser derrubado.", dano: "-", cd: "-" }],
+        5: [{ nome: "Fúria Santa", tipo: "Ativa", desc: "Dano radiante extra.", dano: "+1d8", cd: "1 Combate" }, { nome: "Aura de Proteção", tipo: "Passiva", desc: "+1 Def aliados em 3m.", dano: "-", cd: "-" }],
+        6: [{ nome: "Recuperar Fôlego", tipo: "Ativa", desc: "Cura 50% dos PV.", dano: "Cura", cd: "1 Sessão" }, { nome: "Contra-Golpe", tipo: "Passiva", desc: "Se errar ele, ele bate de volta.", dano: "1d8", cd: "-" }],
+        7: [{ nome: "Investida Gloriosa", tipo: "Ativa", desc: "Dano e derruba inimigos em linha.", dano: "3d8", cd: "1 Combate" }, { nome: "Inquebrável", tipo: "Passiva", desc: "Imune a Críticos.", dano: "-", cd: "-" }],
+        8: [{ nome: "Invencível", tipo: "Ativa", desc: "Imune a dano por 1 turno.", dano: "Imune", cd: "1 Sessão" }, { nome: "Campeão", tipo: "Passiva", desc: "+2 em todos atributos.", dano: "-", cd: "-" }]
+    },
+    "gambler": {
+        1: [{ nome: "Cara ou Coroa", tipo: "Ativa", desc: "Cara: +2 Atk. Coroa: -2 Atk.", dano: "Sorte", cd: "1 Turno" }, { nome: "Cartas Afiadas", tipo: "Passiva", desc: "Baralhos são armas letais.", dano: "1d6", cd: "-" }],
+        2: [{ nome: "Aposta Alta", tipo: "Ativa", desc: "Dobra o dano ou falha crítica.", dano: "Risco", cd: "2 Turnos" }, { nome: "Blefe", tipo: "Passiva", desc: "+4 Enganação.", dano: "-", cd: "-" }],
+        3: [{ nome: "Roleta Russa", tipo: "Ativa", desc: "1d6. Se cair 6: 4d10 dano. 1: Toma 1d10.", dano: "Extremo", cd: "1 Combate" }, { nome: "Sorte de Principiante", tipo: "Passiva", desc: "Pode re-rolar 1 dado/sessão.", dano: "-", cd: "-" }],
+        4: [{ nome: "Dado Viciado", tipo: "Ativa", desc: "Define o resultado de um d6.", dano: "Manipular", cd: "1 Sessão" }, { nome: "Malandragem", tipo: "Passiva", desc: "Pode roubar como ação livre.", dano: "-", cd: "-" }],
+        5: [{ nome: "Jackpot", tipo: "Ativa", desc: "Se tirar 20, ganha ação extra.", dano: "-", cd: "-" }, { nome: "Lançar Moedas", tipo: "Ativa", desc: "Dano em área cone.", dano: "2d6", cd: "1 Combate" }],
+        6: [{ nome: "Destino Cruzado", tipo: "Ativa", desc: "Troca de PV com o alvo.", dano: "Troca", cd: "1 Sessão" }, { nome: "Sortudo", tipo: "Passiva", desc: "+1 em todos os testes.", dano: "-", cd: "-" }],
+        7: [{ nome: "Coringa", tipo: "Ativa", desc: "Copia uma skill de aliado por 1 turno.", dano: "Copy", cd: "1 Combate" }, { nome: "Oportunista", tipo: "Passiva", desc: "Critico em 18-20.", dano: "-", cd: "-" }],
+        8: [{ nome: "All In", tipo: "Ativa", desc: "Gasta todo ouro/mana/recurso: Dano massivo.", dano: "Variável", cd: "1 Sessão" }, { nome: "Anjo da Sorte", tipo: "Passiva", desc: "Nunca falha criticamente (1 vira 2).", dano: "-", cd: "-" }]
+    },
+    "mercenario": {
+        1: [{ nome: "Pagamento Adiantado", tipo: "Passiva", desc: "Começa com +Dinheiro. +2 Negociação.", dano: "-", cd: "-" }, { nome: "Golpe Sujo", tipo: "Ativa", desc: "Joga areia/chuta baixo. Cega 1 turno.", dano: "Debuff", cd: "1 Combate" }],
+        2: [{ nome: "Mestre de Armas", tipo: "Passiva", desc: "Proficiente com tudo.", dano: "-", cd: "-" }, { nome: "Tiro Rápido", tipo: "Ativa", desc: "Atk distância sem mirar.", dano: "1d6", cd: "-" }],
+        3: [{ nome: "Contrato", tipo: "Ativa", desc: "Escolhe um alvo. +2 dano nele.", dano: "Marca", cd: "1 Combate" }, { nome: "Peleja", tipo: "Passiva", desc: "+1 Def se tiver >2 inimigos perto.", dano: "-", cd: "-" }],
+        4: [{ nome: "Granada de Luz", tipo: "Ativa", desc: "Cega área.", dano: "Cegueira", cd: "1 Combate" }, { nome: "Cochilo Tático", tipo: "Ativa", desc: "Cura 1d10 fora de combate.", dano: "Cura", cd: "-" }],
+        5: [{ nome: "Lobo Solitário", tipo: "Passiva", desc: "+2 Dano se longe de aliados.", dano: "-", cd: "-" }, { nome: "Executar Contrato", tipo: "Ativa", desc: "Dano extra em alvo marcado.", dano: "+2d6", cd: "1 Turno" }],
+        6: [{ nome: "Escudo Humano", tipo: "Ativa", desc: "Usa inimigo como escudo.", dano: "Grapple", cd: "1 Combate" }, { nome: "Profissional", tipo: "Passiva", desc: "Não se abala. Imune medo.", dano: "-", cd: "-" }],
+        7: [{ nome: "Massacre", tipo: "Ativa", desc: "Ataca todos adjacentes.", dano: "Whirlwind", cd: "1 Combate" }, { nome: "Rico", tipo: "Passiva", desc: "Pode subornar inimigos (NPCs).", dano: "-", cd: "-" }],
+        8: [{ nome: "Exército de Um Homem", tipo: "Ativa", desc: "Dobra ataques por 1 turno.", dano: "Double", cd: "1 Sessão" }, { nome: "Lenda do Submundo", tipo: "Passiva", desc: "Inimigos fracos fogem de você.", dano: "Medo", cd: "-" }]
+    },
+    "mafioso": {
+        1: [{ nome: "Intimidação", tipo: "Ativa", desc: "Amedronta alvo.", dano: "Debuff", cd: "1 Turno" }, { nome: "Família", tipo: "Passiva", desc: "Tem contatos na cidade.", dano: "-", cd: "-" }],
+        2: [{ nome: "Tiro à Queima-Roupa", tipo: "Ativa", desc: "Dano extra se adjacente.", dano: "+1d6", cd: "1 Turno" }, { nome: "Estilo", tipo: "Passiva", desc: "+2 Presença.", dano: "-", cd: "-" }],
+        3: [{ nome: "Capanga", tipo: "Ativa", desc: "Invoca um NPC capanga.", dano: "Summon", cd: "1 Sessão" }, { nome: "Negócios", tipo: "Passiva", desc: "Desconto em lojas.", dano: "-", cd: "-" }],
+        4: [{ nome: "Metralhadora Thompson", tipo: "Ativa", desc: "Cone de balas.", dano: "3d6", cd: "1 Combate" }, { nome: "Respeito", tipo: "Passiva", desc: "Inimigos hesitam atacar (Vontade).", dano: "-", cd: "-" }],
+        5: [{ nome: "Vendetta", tipo: "Ativa", desc: "Se apanhar, ganha bônus contra o agressor.", dano: "+2 Atk", cd: "-" }, { nome: "Padrinho", tipo: "Passiva", desc: "Buffa aliados próximos.", dano: "+1 Dano", cd: "-" }],
+        6: [{ nome: "Molotov", tipo: "Ativa", desc: "Área de fogo persistente.", dano: "2d6/t", cd: "1 Combate" }, { nome: "Lealdade", tipo: "Passiva", desc: "Imune a traição/charme.", dano: "-", cd: "-" }],
+        7: [{ nome: "Carro Bomba", tipo: "Ativa", desc: "Explosão massiva se houver veículo.", dano: "6d6", cd: "1 Sessão" }, { nome: "Omertà", tipo: "Passiva", desc: "Nunca revela segredos (Imune interrogatório).", dano: "-", cd: "-" }],
+        8: [{ nome: "Don", tipo: "Ativa", desc: "Chama a gangue toda (3 capangas).", dano: "Summon x3", cd: "1 Sessão" }, { nome: "Rei do Crime", tipo: "Passiva", desc: "Acesso a itens proibidos.", dano: "-", cd: "-" }]
+    },
+    "policial": {
+        1: [{ nome: "Algemar", tipo: "Ativa", desc: "Prende alvo (agarrar).", dano: "Imóvel", cd: "1 Combate" }, { nome: "Autoridade", tipo: "Passiva", desc: "+2 Intimidação legal.", dano: "-", cd: "-" }],
+        2: [{ nome: "Taser", tipo: "Ativa", desc: "Dano elétrico e atordoa.", dano: "1d4+Stun", cd: "2 Turnos" }, { nome: "Colete Kevlar", tipo: "Passiva", desc: "RD 2 contra balas.", dano: "-", cd: "-" }],
+        3: [{ nome: "Parceiro", tipo: "Passiva", desc: "+2 Defesa se adjacente a aliado.", dano: "-", cd: "-" }, { nome: "Invasão Tática", tipo: "Ativa", desc: "Surpreende inimigos em sala.", dano: "Iniciativa", cd: "-" }],
+        4: [{ nome: "Escudo Balístico", tipo: "Ativa", desc: "Cobertura móvel.", dano: "+4 Def", cd: "1 Combate" }, { nome: "Investigação", tipo: "Passiva", desc: "+2 Percepção.", dano: "-", cd: "-" }],
+        5: [{ nome: "Spray de Pimenta", tipo: "Ativa", desc: "Cega cone pequeno.", dano: "Cegueira", cd: "1 Combate" }, { nome: "Negociador", tipo: "Ativa", desc: "Pode parar combate p/ falar.", dano: "Social", cd: "1 Sessão" }],
+        6: [{ nome: "Reforços", tipo: "Ativa", desc: "Chama 2 NPCs policiais.", dano: "Summon", cd: "1 Sessão" }, { nome: "Atirador de Elite", tipo: "Passiva", desc: "Ignora cobertura.", dano: "-", cd: "-" }],
+        7: [{ nome: "Ariete", tipo: "Ativa", desc: "Quebra portas/barreiras.", dano: "-", cd: "-" }, { nome: "Corrupto ou Honesto", tipo: "Passiva", desc: "Escolhe bônus: +Ouro ou +Vontade.", dano: "-", cd: "-" }],
+        8: [{ nome: "SWAT", tipo: "Ativa", desc: "Equipamento pesado (Flashbang+Fuzil).", dano: "4d8", cd: "1 Sessão" }, { nome: "A Lei", tipo: "Passiva", desc: "+2 Dano contra criminosos.", dano: "-", cd: "-" }]
+    },
+    "engenheiro": {
+        1: [{ nome: "Reparar", tipo: "Ativa", desc: "Conserta itens/veículos/drones.", dano: "Cura Mec", cd: "-" }, { nome: "Gambiarra", tipo: "Passiva", desc: "Cria itens com lixo.", dano: "-", cd: "-" }],
+        2: [{ nome: "Drone de Recon", tipo: "Ativa", desc: "Vê área segura.", dano: "Visão", cd: "1 Combate" }, { nome: "Mecânico", tipo: "Passiva", desc: "+2 Pilotagem/Tecnologia.", dano: "-", cd: "-" }],
+        3: [{ nome: "Torreta Sentinela", tipo: "Ativa", desc: "Instala arma que atira sozinha.", dano: "1d6/t", cd: "1 Sessão" }, { nome: "Sabotagem", tipo: "Ativa", desc: "Quebra arma inimiga.", dano: "Disarm", cd: "1 Combate" }],
+        4: [{ nome: "Campo de Força", tipo: "Ativa", desc: "Parede de energia.", dano: "Wall", cd: "1 Combate" }, { nome: "Blindagem", tipo: "Passiva", desc: "Veículos ganham +RD.", dano: "-", cd: "-" }],
+        5: [{ nome: "Drone de Combate", tipo: "Ativa", desc: "Drone que ataca.", dano: "1d8", cd: "1 Combate" }, { nome: "Otimização", tipo: "Passiva", desc: "Armas tec ganham +1 Dano.", dano: "-", cd: "-" }],
+        6: [{ nome: "Exoesqueleto", tipo: "Ativa", desc: "Ganha Força e Defesa temp.", dano: "Buff", cd: "1 Sessão" }, { nome: "Hacker", tipo: "Ativa", desc: "Controla máquinas inimigas.", dano: "Control", cd: "1 Combate" }],
+        7: [{ nome: "Sobrecarga", tipo: "Ativa", desc: "Explode seus gadgets.", dano: "4d6", cd: "-" }, { nome: "Mestre Construtor", tipo: "Passiva", desc: "Torretas têm +PV e +Dano.", dano: "-", cd: "-" }],
+        8: [{ nome: "Robô Gigante", tipo: "Ativa", desc: "Invoca Mecha de Batalha.", dano: "Titan", cd: "1 Sessão" }, { nome: "Tecnocrata", tipo: "Passiva", desc: "Pode ter 2 engenhocas ativas.", dano: "-", cd: "-" }]
+    },
+    "quimico": { // Cientista
+        1: [{ nome: "Mistura Instável", tipo: "Ativa", desc: "Joga frasco aleatório (Fogo/Ácido).", dano: "1d6", cd: "1 Turno" }, { nome: "Antídoto", tipo: "Ativa", desc: "Cura veneno.", dano: "Cura", cd: "-" }],
+        2: [{ nome: "Gás Lacrimogêneo", tipo: "Ativa", desc: "Cega e sufoca área.", dano: "Debuff", cd: "1 Combate" }, { nome: "Resistência Química", tipo: "Passiva", desc: "Imune a ácidos/venenos.", dano: "-", cd: "-" }],
+        3: [{ nome: "Estimulante", tipo: "Ativa", desc: "Aliado ganha Haste (Ação Extra).", dano: "Buff", cd: "1 Combate" }, { nome: "Analista", tipo: "Passiva", desc: "Identifica fraquezas.", dano: "-", cd: "-" }],
+        4: [{ nome: "Ácido Corrosivo", tipo: "Ativa", desc: "Derrete armadura (RD 0).", dano: "Debuff Def", cd: "1 Combate" }, { nome: "Primeiros Socorros", tipo: "Passiva", desc: "Medicina aprimorada.", dano: "+Cura", cd: "-" }],
+        5: [{ nome: "Mutação", tipo: "Ativa", desc: "Ganha garras ou brânquias temp.", dano: "Buff", cd: "1 Sessão" }, { nome: "Explosivos Plásticos", tipo: "Ativa", desc: "Bomba remota.", dano: "3d6", cd: "1 Combate" }],
+        6: [{ nome: "Soro da Verdade", tipo: "Ativa", desc: "Interrogatório infalível.", dano: "Social", cd: "-" }, { nome: "Vírus", tipo: "Ativa", desc: "Doença que espalha entre inimigos.", dano: "DoT Área", cd: "1 Sessão" }],
+        7: [{ nome: "Elixir da Vida", tipo: "Ativa", desc: "Cura total de um alvo.", dano: "Full Heal", cd: "1 Sessão" }, { nome: "Cientista Louco", tipo: "Passiva", desc: "Pode misturar 2 poções.", dano: "-", cd: "-" }],
+        8: [{ nome: "Bomba Atômica (Mini)", tipo: "Ativa", desc: "Dano massivo, área radioativa.", dano: "10d6", cd: "1 Campanha" }, { nome: "Imunidade Universal", tipo: "Passiva", desc: "Imune a doenças/venenos/gases.", dano: "-", cd: "-" }]
+    },
+    "criminoso": {
+        1: [{ nome: "Mãos Leves", tipo: "Passiva", desc: "Rouba sem ser notado.", dano: "-", cd: "-" }, { nome: "Golpe Baixo", tipo: "Ativa", desc: "Dano extra em homens.", dano: "1d6+Stun", cd: "1 Combate" }],
+        2: [{ nome: "Arrombar", tipo: "Passiva", desc: "Abre portas/cofres.", dano: "-", cd: "-" }, { nome: "Faca nas Costas", tipo: "Ativa", desc: "Crítico automático se oculto.", dano: "Crit", cd: "1 Combate" }],
+        3: [{ nome: "Contatos do Crime", tipo: "Passiva", desc: "Compra armas ilegais.", dano: "-", cd: "-" }, { nome: "Ameaçar", tipo: "Ativa", desc: "Usa força para social.", dano: "Intimidar", cd: "-" }],
+        4: [{ nome: "Fuga", tipo: "Ativa", desc: "Desengaja e corre dobro.", dano: "Fuga", cd: "1 Turno" }, { nome: "Rua", tipo: "Passiva", desc: "+2 Iniciativa e Percepção urbano.", dano: "-", cd: "-" }],
+        5: [{ nome: "Sequestro", tipo: "Ativa", desc: "Agarra e move inimigo.", dano: "Grapple", cd: "-" }, { nome: "Emboscada", tipo: "Passiva", desc: "+1 Turno surpresa.", dano: "-", cd: "-" }],
+        6: [{ nome: "Sabotagem Veicular", tipo: "Ativa", desc: "Corta freios/estraga motor.", dano: "-", cd: "-" }, { nome: "Implacável", tipo: "Passiva", desc: "Não morre com 0 PV (fica com 1).", dano: "1x/Dia", cd: "-" }],
+        7: [{ nome: "Rebelião", tipo: "Ativa", desc: "Incita NPCs a lutar.", dano: "Chaos", cd: "1 Sessão" }, { nome: "Mestre do Disfarce", tipo: "Ativa", desc: "Muda aparência.", dano: "-", cd: "-" }],
+        8: [{ nome: "Chefe do Crime", tipo: "Passiva", desc: "Ganha renda passiva.", dano: "$$$", cd: "-" }, { nome: "O Crime Compensa", tipo: "Ativa", desc: "Gasta dinheiro p/ dano.", dano: "Pay2Win", cd: "-" }]
+    },
+    "investigador": {
+        1: [{ nome: "Dedução", tipo: "Passiva", desc: "Descobre pistas invisíveis.", dano: "-", cd: "-" }, { nome: "Interrogar", tipo: "Ativa", desc: "Detecta mentiras.", dano: "Social", cd: "-" }],
+        2: [{ nome: "Ponto Fraco", tipo: "Ativa", desc: "Analisa inimigo. Próximo atk ignora RD.", dano: "Pierce", cd: "1 Turno" }, { nome: "Memória Eidética", tipo: "Passiva", desc: "Lembra de tudo.", dano: "-", cd: "-" }],
+        3: [{ nome: "Antecipação", tipo: "Ativa", desc: "+4 Defesa contra 1 ataque.", dano: "Esquiva", cd: "1 Rodada" }, { nome: "Lógica Fria", tipo: "Passiva", desc: "Imune a ilusões.", dano: "-", cd: "-" }],
+        4: [{ nome: "Desarmar Armadilha", tipo: "Ativa", desc: "Desativa perigos.", dano: "-", cd: "-" }, { nome: "Tiro Tático", tipo: "Ativa", desc: "Remove buff do inimigo.", dano: "Dispel", cd: "1 Combate" }],
+        5: [{ nome: "Perfil Criminal", tipo: "Passiva", desc: "Sabe como inimigo age.", dano: "+Iniciativa", cd: "-" }, { nome: "Revelação", tipo: "Ativa", desc: "Expõe inimigos ocultos.", dano: "Visão", cd: "-" }],
+        6: [{ nome: "Plano B", tipo: "Ativa", desc: "Re-rola uma ação falha.", dano: "Reroll", cd: "1 Sessão" }, { nome: "Mente Blindada", tipo: "Passiva", desc: "RD 5 mental.", dano: "-", cd: "-" }],
+        7: [{ nome: "Xeque-Mate", tipo: "Ativa", desc: "Se acertar, inimigo não age 1 turno.", dano: "Stun", cd: "1 Combate" }, { nome: "Sabe-Tudo", tipo: "Passiva", desc: "+2 Todas Perícias.", dano: "-", cd: "-" }],
+        8: [{ nome: "A Verdade", tipo: "Ativa", desc: "Descobre o segredo do plot/boss.", dano: "Narrativo", cd: "1 Sessão" }, { nome: "Sherlock", tipo: "Passiva", desc: "Critica com 15-20 se analisou.", dano: "-", cd: "-" }]
+    },
+    "artista": {
+        1: [{ nome: "Inspiração Bárdica", tipo: "Ativa", desc: "Dado extra (1d6) para aliado.", dano: "Buff", cd: "2 Turnos" }, { nome: "Charme", tipo: "Passiva", desc: "+2 Social.", dano: "-", cd: "-" }],
+        2: [{ nome: "Canção de Ninar", tipo: "Ativa", desc: "Põe inimigos pra dormir.", dano: "Sleep", cd: "1 Combate" }, { nome: "Distração", tipo: "Ativa", desc: "Inimigos olham pra você.", dano: "Taunt", cd: "1 Turno" }],
+        3: [{ nome: "Grito Sônico", tipo: "Ativa", desc: "Dano e atordoa em cone.", dano: "2d6", cd: "1 Combate" }, { nome: "Famoso", tipo: "Passiva", desc: "Reconhecido em lugares.", dano: "-", cd: "-" }],
+        4: [{ nome: "Performance", tipo: "Ativa", desc: "Ganha dinheiro/info com arte.", dano: "-", cd: "-" }, { nome: "Canção de Guerra", tipo: "Ativa", desc: "Aliados +1 Atk/Dano.", dano: "Buff Área", cd: "1 Combate" }],
+        5: [{ nome: "Mímica", tipo: "Ativa", desc: "Copia ação de outro.", dano: "Copy", cd: "1 Sessão" }, { nome: "Musa", tipo: "Passiva", desc: "Aliados recuperam PE perto de você.", dano: "Regen MP", cd: "-" }],
+        6: [{ nome: "Dança das Lâminas", tipo: "Ativa", desc: "Ataca enquanto move.", dano: "1d8", cd: "1 Turno" }, { nome: "Ilusão Maior", tipo: "Ativa", desc: "Cria cenário falso.", dano: "-", cd: "1 Sessão" }],
+        7: [{ nome: "Ode à Vida", tipo: "Ativa", desc: "Cura em área massiva.", dano: "4d8", cd: "1 Sessão" }, { nome: "Sátira Mordaz", tipo: "Ativa", desc: "Inimigo sofre dano psíquico.", dano: "3d6", cd: "1 Turno" }],
+        8: [{ nome: "Showstopper", tipo: "Ativa", desc: "Para o tempo/combate por 1 turno.", dano: "Time Stop", cd: "1 Sessão" }, { nome: "Lenda do Rock", tipo: "Passiva", desc: "Sua música altera a realidade.", dano: "God", cd: "-" }]
+    },
+    "padre": {
+        1: [{ nome: "Benção", tipo: "Ativa", desc: "+1d4 em testes por 1 min.", dano: "Buff", cd: "1 Combate" }, { nome: "Água Benta", tipo: "Ativa", desc: "Dano em demônios/mortos.", dano: "1d8", cd: "1 Turno" }],
+        2: [{ nome: "Cura pelas Mãos", tipo: "Ativa", desc: "Cura toque.", dano: "1d10", cd: "1 Turno" }, { nome: "Proteção Divina", tipo: "Passiva", desc: "+1 Def contra Mal.", dano: "-", cd: "-" }],
+        3: [{ nome: "Exorcismo", tipo: "Ativa", desc: "Expulsa possessões/espíritos.", dano: "Banish", cd: "1 Combate" }, { nome: "Fé", tipo: "Passiva", desc: "Imune medo/terror.", dano: "-", cd: "-" }],
+        4: [{ nome: "Círculo Sagrado", tipo: "Ativa", desc: "Inimigos não entram.", dano: "Barreira", cd: "1 Combate" }, { nome: "Luz", tipo: "Ativa", desc: "Ilumina e cega trevas.", dano: "Flash", cd: "-" }],
+        5: [{ nome: "Martelo Divino", tipo: "Ativa", desc: "Arma espiritual ataca.", dano: "2d8", cd: "1 Combate" }, { nome: "Mártir", tipo: "Passiva", desc: "Absorve dano de aliados.", dano: "Sacrifício", cd: "-" }],
+        6: [{ nome: "Oração em Massa", tipo: "Ativa", desc: "Cura todos em 2d8.", dano: "Cura Área", cd: "1 Sessão" }, { nome: "Voto de Silêncio", tipo: "Passiva", desc: "Se não falar, +2 Vontade.", dano: "-", cd: "-" }],
+        7: [{ nome: "Ressurreição", tipo: "Ativa", desc: "Traz de volta à vida.", dano: "Reviver", cd: "1 Sessão" }, { nome: "Aura Santa", tipo: "Passiva", desc: "Dano radiante em volta.", dano: "1d6/t", cd: "-" }],
+        8: [{ nome: "Intervenção Divina", tipo: "Ativa", desc: "Pede milagre ao Deus.", dano: "Deus Ex", cd: "1 Campanha" }, { nome: "Santo", tipo: "Passiva", desc: "Não envelhece/não adoece.", dano: "-", cd: "-" }]
+    },
+    "cultista": {
+        1: [{ nome: "Pacto de Sangue", tipo: "Ativa", desc: "Gasta PV p/ +Dano.", dano: "+1d6", cd: "-" }, { nome: "Sussurros", tipo: "Passiva", desc: "Ouve coisas ocultas.", dano: "-", cd: "-" }],
+        2: [{ nome: "Dreno de Vida", tipo: "Ativa", desc: "Rouba PV do inimigo.", dano: "1d6 Vamp", cd: "1 Turno" }, { nome: "Marca Maldita", tipo: "Ativa", desc: "-2 Def no alvo.", dano: "Debuff", cd: "1 Combate" }],
+        3: [{ nome: "Tentáculos", tipo: "Ativa", desc: "Prende e esmaga.", dano: "2d6+Grapple", cd: "1 Combate" }, { nome: "Insanidade", tipo: "Passiva", desc: "Vontade instável (+/-).", dano: "-", cd: "-" }],
+        4: [{ nome: "Sacrifício", tipo: "Ativa", desc: "Mata aliado/NPC p/ buff full.", dano: "Buff Max", cd: "1 Sessão" }, { nome: "Necromancia", tipo: "Ativa", desc: "Levanta 1 zumbi.", dano: "Summon", cd: "1 Sessão" }],
+        5: [{ nome: "Mente Colmeia", tipo: "Passiva", desc: "Compartilha dor com inimigos.", dano: "Refletir", cd: "-" }, { nome: "Olhar do Abismo", tipo: "Ativa", desc: "Stun e Dano mental.", dano: "3d6", cd: "1 Combate" }],
+        6: [{ nome: "Forma Demoníaca", tipo: "Ativa", desc: "Vira demônio (Voa, +For).", dano: "Transf.", cd: "1 Sessão" }, { nome: "Portal", tipo: "Ativa", desc: "Teleporte longo.", dano: "-", cd: "1 Sessão" }],
+        7: [{ nome: "Palavra de Morte", tipo: "Ativa", desc: "Dano massivo se falhar Vontade.", dano: "5d10", cd: "1 Sessão" }, { nome: "Imortalidade", tipo: "Passiva", desc: "Se morrer, volta no altar.", dano: "-", cd: "-" }],
+        8: [{ nome: "Fim dos Tempos", tipo: "Ativa", desc: "Invoca Deus Antigo (Game Over?).", dano: "Apocalipse", cd: "1 Campanha" }, { nome: "Escolhido", tipo: "Passiva", desc: "NPCs cultistas obedecem.", dano: "-", cd: "-" }]
+    }
+};
+
+// =================================================================
+// FUNÇÕES DE GERAÇÃO
+// =================================================================
+function getData(id, nivel, slot) {
+    try {
+        return SKILLS_DB[id][nivel][slot];
+    } catch (e) {
+        return { nome: "Erro", tipo: "Passiva", desc: "Skill não encontrada", dano: "-", cd: "-" };
+    }
+}
+
+function gerarSkill(id, n, i){
+    const dados = getData(id, n, i-1); 
+    // Cor condicional simples: Amarelo Ativa, Roxo Passiva (Baseado no seu código original)
+    let corTipo = dados.tipo.toLowerCase().includes("ativa") ? "#ffd84c" : "#b96cff";
+
+    const uniqueId = `chk_${id}_${n}_${i}`; // ID ÚNICO
+
+    return `
+    <div class="skill">
+        <label class="check">
+            <input type="checkbox" id="${uniqueId}" data-group="grp_${id}_${n}">
+            <span></span>
+        </label>
+        <div class="skill-content">
+            <div class="skill-name">
+                ${dados.nome} 
+                <span class="tipo" style="color:${corTipo}">[${dados.tipo}]</span>
+            </div>
+            <div class="skill-desc">
+                ${dados.desc}
+            </div>
+            <div class="stats-box">
+                <div class="dano">🗡️ ${dados.dano}</div>
+                <div class="cd">⏳ ${dados.cd}</div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function gerarNiveis(id){
+    let html = "";
+    for(let n=1; n<=8; n++){
+        html += `
+        <div class="level">
+            <h3>Nível ${n}</h3>
+            ${gerarSkill(id, n, 1)}
+            ${gerarSkill(id, n, 2)}
+        </div>`;
+    }
+    return html;
+}
+
+// =================================================================
+// TIER LIST DATA E LÓGICA
+// =================================================================
+const TIER_DATA = {
+    "DPS": {
+        "S": ["Ninja", "Apostador", "Cultista", "Mafioso", "Caçador", "Onmyoji"],
+        "A": ["Criminoso", "Mercenário", "Investigador", "Samurai"],
+        "B": ["Policial"],
+        "C": ["----"]
+    },
+    "TANK": {
+        "S": ["Mongol", "Cultista", "Cavaleiro", "Militar", "Mercenário"],
+        "A": ["----"],
+        "B": ["----"],
+        "C": ["----"]
+    },
+    "SUPORTE": {
+        "S": ["Líder", "Artista"],
+        "A": ["Padre"],
+        "B": ["Engenheiro"],
+        "C": ["----"]
+    },
+    "CURANDEIRO": {
+        "S": ["Xamã"],
+        "A": ["Padre", "Cientista"],
+        "B": ["----"],
+        "C": ["----"]
+    }
+};
+
+function renderTierList() {
+    const cat = document.getElementById('tierSelect').value;
+    const display = document.getElementById('tierDisplay');
+    const data = TIER_DATA[cat];
+    
+    display.innerHTML = ''; 
+
+    ['S', 'A', 'B', 'C'].forEach(rank => {
+        const row = document.createElement('div');
+        row.className = 'tier-row';
+
+        const rankBox = document.createElement('div');
+        rankBox.className = `tier-rank rank-${rank.toLowerCase()}`;
+        rankBox.textContent = rank;
+
+        const contentBox = document.createElement('div');
+        contentBox.className = 'tier-content';
+        
+        data[rank].forEach(name => {
+            const item = document.createElement('span');
+            item.className = 'tier-item';
+            item.innerHTML = name + "&nbsp;|&nbsp;";
+            contentBox.appendChild(item);
+        });
+
+        row.appendChild(rankBox);
+        row.appendChild(contentBox);
+        display.appendChild(row);
+    });
+}
+</script>
+
+<div class="ancestral lutador">
+    <h2>Caçador — Lutador</h2>
+    <div class="desc">Combatente ágil, letal e furtivo. Especialista em rastrear, observar e eliminar alvos com precisão cirúrgica.</div>
+    <script>document.write(gerarNiveis("cacador"));</script>
+</div>
+
+<div class="ancestral controle">
+    <h2>Líder — Controle</h2>
+    <div class="desc">Você é o tipo de líder que não precisa falar muito. Seu posicionamento, sua movimentação e sua determinação dizem tudo.</div>
+    <script>document.write(gerarNiveis("lider"));</script>
+</div>
+
+<div class="ancestral curandeiro">
+    <h2>Xamã — Curandeiro</h2>
+    <div class="desc">Místico tribal que canaliza forças naturais. Utiliza rituais e símbolos antigos. Habilidades de ataque só funcionam com não-humanos.</div>
+    <script>document.write(gerarNiveis("xama"));</script>
+</div>
+
+<div class="ancestral invocador">
+    <h2>Onmyoji — Invocador</h2>
+    <div class="desc">Invoca shikigamis e manipula energias espirituais. Mestre em selos e controle do campo.</div>
+    <script>document.write(gerarNiveis("onmyoji"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Samurai — Lutador</h2>
+    <div class="desc">Guerreiro honrado focado em duelos letais e precisão com a Katana.</div>
+    <script>document.write(gerarNiveis("samurai"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Ninja — Lutador</h2>
+    <div class="desc">Mestre da furtividade e ataques surpresa. Mobilidade extrema e venenos.</div>
+    <script>document.write(gerarNiveis("ninja"));</script>
+</div>
+
+<div class="ancestral tank">
+    <h2>Mongol — Tank</h2>
+    <div class="desc">Resistência bruta e combate montado. Imparável em campo aberto.</div>
+    <script>document.write(gerarNiveis("mongol"));</script>
+</div>
+
+<div class="ancestral tank">
+    <h2>Militar — Tank</h2>
+    <div class="desc">Táticas modernas e defesa pesada. Poder de fogo concentrado.</div>
+    <script>document.write(gerarNiveis("militar"));</script>
+</div>
+
+<div class="ancestral tank">
+    <h2>Cavaleiro — Tank</h2>
+    <div class="desc">A muralha de ferro que protege o grupo. Foco total em defesa física.</div>
+    <script>document.write(gerarNiveis("cavaleiro"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Apostador — Lutador</h2>
+    <div class="desc">A sorte é sua maior arma. Dano massivo mas arriscado.</div>
+    <script>document.write(gerarNiveis("gambler"));</script>
+</div>
+
+<div class="ancestral subtank">
+    <h2>Mercenário — Sub-Tank</h2>
+    <div class="desc">Luta por dinheiro. Versátil, sujo e eficiente.</div>
+    <script>document.write(gerarNiveis("mercenario"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Mafioso — Lutador</h2>
+    <div class="desc">Combate sujo, influência no submundo e capangas.</div>
+    <script>document.write(gerarNiveis("mafioso"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Policial — Lutador</h2>
+    <div class="desc">Mantém a ordem com poder de fogo e táticas de apreensão.</div>
+    <script>document.write(gerarNiveis("policial"));</script>
+</div>
+
+<div class="ancestral suporte">
+    <h2>Engenheiro — Suporte</h2>
+    <div class="desc">Constrói engenhocas, drones e defesas para auxiliar o time.</div>
+    <script>document.write(gerarNiveis("engenheiro"));</script>
+</div>
+
+<div class="ancestral curandeiro">
+    <h2>Cientista — Curandeiro</h2>
+    <div class="desc">Misturas instáveis que curam ou destroem (Químico).</div>
+    <script>document.write(gerarNiveis("quimico"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Criminoso — Lutador</h2>
+    <div class="desc">Imprevisível e perigoso em curto alcance. Golpes baixos e fuga.</div>
+    <script>document.write(gerarNiveis("criminoso"));</script>
+</div>
+
+<div class="ancestral lutador">
+    <h2>Investigador — Lutador</h2>
+    <div class="desc">Analisa fraquezas para atacar onde dói. Inteligência em combate.</div>
+    <script>document.write(gerarNiveis("investigador"));</script>
+</div>
+
+<div class="ancestral suporte">
+    <h2>Artista — Suporte</h2>
+    <div class="desc">Inspira aliados através da arte e performance. Controla emoções.</div>
+    <script>document.write(gerarNiveis("artista"));</script>
+</div>
+
+<div class="ancestral suporte">
+    <h2>Padre — Suporte</h2>
+    <div class="desc">Fé inabalável para proteger e abençoar. Pesadelo dos demônios.</div>
+    <script>document.write(gerarNiveis("padre"));</script>
+</div>
+
+<div class="ancestral cultista">
+    <h2>Cultista — Sacrifical</h2>
+    <div class="desc">Poderes proibidos a um custo terrível. Gasta vida ou defesa para atacar.</div>
+    <script>document.write(gerarNiveis("cultista"));</script>
+</div>
+
+<div class="tier-section">
+    <div class="tier-controls">
+        <h2>🏆 TIER LIST ANCESTRAL</h2>
+        <select id="tierSelect" onchange="renderTierList()">
+            <option value="DPS">DPS (Dano)</option>
+            <option value="TANK">TANK (Defesa)</option>
+            <option value="SUPORTE">SUPORTE (Buffs)</option>
+            <option value="CURANDEIRO">CURANDEIRO (Cura)</option>
+        </select>
+    </div>
+    <div id="tierDisplay"></div>
+</div>
+
+<script>
+// =================================================================
+// LÓGICA DE LOCALSTORAGE E INTERAÇÃO
+// =================================================================
+
+// 1. Inicializar TIER LIST ao carregar
+renderTierList();
+
+// 2. Ouvinte de eventos para Checkboxes (Seleção Única + Save)
+document.addEventListener("change", e => {
+    if(e.target.type === "checkbox"){
+        const currentId = e.target.id;
+        const group = e.target.dataset.group;
+        
+        // Comportamento de Radio Button (Só 1 por nível)
+        if(e.target.checked) {
+            document.querySelectorAll(`input[data-group='${group}']`).forEach(cb => {
+                if(cb.id !== currentId) {
+                    cb.checked = false;
+                    localStorage.removeItem(cb.id); // Remove o estado do outro
+                }
+            });
+            // Salva o atual como checked
+            localStorage.setItem(currentId, "true");
+        } else {
+            // Se desmarcar, remove do storage
+            localStorage.removeItem(currentId);
+        }
+    }
+});
+
+// 3. Carregar Estado Salvo ao Abrir a Página
+window.addEventListener('load', () => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        if(localStorage.getItem(cb.id) === "true"){
+            cb.checked = true;
+        }
+    });
+});
+</script>
+
+</body>
+</html>
