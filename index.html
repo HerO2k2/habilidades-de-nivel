@@ -134,206 +134,2609 @@ h1{ text-align:center; margin-bottom:40px; text-shadow: 0 0 10px #4ceaff; }
 // BANCO DE DADOS COMPLETO (20 CLASSES)
 // =================================================================
 const SKILLS_DB = {
-    "cacador": { // Antigo Arqueiro/Atirador
-        1: [{ nome: "Olhos de Águia", tipo: "Passiva", desc: "Visão ampliada e precisão extrema. +2 em testes de Percepção e Pontaria.", dano: "-", cd: "-" }, { nome: "Disparo Perfurante", tipo: "Ativa", desc: "Disparo que ignora 2 pontos de defesa. Se o alvo estiver a mais de 10m, causa dano extra.", dano: "1d8+2", cd: "2 Turnos" }],
-        2: [{ nome: "Rastreamento", tipo: "Passiva", desc: "Identifica pegadas e trilhas. Vantagem em Sobrevivência para caça.", dano: "-", cd: "-" }, { nome: "Armadilha de Corda", tipo: "Ativa", desc: "Prende um inimigo que passar pelo local. Ele fica Imóvel por 1 turno.", dano: "-", cd: "1 Combate" }],
-        3: [{ nome: "Camuflagem", tipo: "Passiva", desc: "+2 em Furtividade em ambientes naturais.", dano: "-", cd: "-" }, { nome: "Chuva de Flechas", tipo: "Ativa", desc: "Ataque em área (3m). Atinge todos os inimigos no raio.", dano: "2d6", cd: "3 Turnos" }],
-        4: [{ nome: "Predador", tipo: "Passiva", desc: "Dano aumentado contra bestas e animais.", dano: "+1d6", cd: "-" }, { nome: "Tiro no Joelho", tipo: "Ativa", desc: "Reduz o deslocamento do alvo a 0.", dano: "1d6+Slow", cd: "2 Turnos" }],
-        5: [{ nome: "Foco Absoluto", tipo: "Passiva", desc: "Se não se mover, ganha +2 no acerto.", dano: "-", cd: "-" }, { nome: "Flecha Explosiva", tipo: "Ativa", desc: "Disparo com ponta explosiva.", dano: "3d6 Área", cd: "1 Combate" }],
-        6: [{ nome: "Instinto Assassino", tipo: "Passiva", desc: "Críticos causam 3x o dano em vez de 2x.", dano: "Crit x3", cd: "-" }, { nome: "Disparo Duplo", tipo: "Ativa", desc: "Realiza dois ataques com uma ação.", dano: "2x 1d8", cd: "1 Rodada" }],
-        7: [{ nome: "Mestre da Caça", tipo: "Passiva", desc: "Nunca é surpreendido. Iniciativa +5.", dano: "-", cd: "-" }, { nome: "Tiro Letal", tipo: "Ativa", desc: "Se o alvo tiver menos de 20% de vida, morre instantaneamente (exceto Boss).", dano: "Morte", cd: "1 Sessão" }],
-        8: [{ nome: "Lenda da Floresta", tipo: "Passiva", desc: "Regenera 1d6 PV por turno em terreno natural.", dano: "Regen", cd: "-" }, { nome: "Flecha Fantasma", tipo: "Ativa", desc: "Atravessa paredes e obstáculos para atingir o alvo.", dano: "4d8", cd: "1 Combate" }]
+    "cacador": {  
+        1: [
+            {
+                nome: "Caçada Silenciosa",
+                tipo: "Ativa",
+                desc: "Você se move sem ser percebido. Role Furtividade (AGI) com vantagem. Se atacar no mesmo turno, ganha bônus de dano.",
+                dano: "+1d4",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Caçador Nascido",
+                tipo: "Passiva",
+                desc: "Ganha +2 em Sobrevivência (AGI).",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "A Presa Preferida",
+                tipo: "Ativa",
+                desc: "Escolha um inimigo como 'presa'. Causa dano extra em todos os testes contra esse inimigo até o fim do combate.",
+                dano: "+1d8",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Reconhecimento",
+                tipo: "Passiva",
+                desc: "Pode alvejar inimigos parcialmente ocultos. Ataques com Pontaria (AGI) ignoram penalidade de cobertura leve.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Intuição Aguçada",
+                tipo: "Ativa",
+                desc: "Gaste 1 PE para evitar um ataque surpresa e detectar inimigos furtivos automaticamente (Reflexo ou Percepção).",
+                dano: "-",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Adrenalina",
+                tipo: "Passiva",
+                desc: "Abaixo de 1/4 PV: Ganha 1d20 bônus em Reflexo e +2 Defesa (corte/perfuração) por 2 turnos.",
+                dano: "+Reflexo",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Arremesso Preciso",
+                tipo: "Passiva",
+                desc: "Objetos arremessáveis causam dano dobrado do tipo (ex: 1d6 vira 2d6).",
+                dano: "x2 Dano",
+                cd: "-"
+            },
+            {
+                nome: "Golpe Crítico",
+                tipo: "Passiva",
+                desc: "Sempre que tirar 20 no dado, dobra o total de dano final do ataque.",
+                dano: "x2 Final",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Instinto de Caça",
+                tipo: "Ativa",
+                desc: "Ataca um inimigo único com bônus massivo (+2d12). Caso tire 20, adiciona +1d12 extra. (Reset: 1 PE).",
+                dano: "+2d12",
+                cd: "3 Rodadas"
+            },
+            {
+                nome: "Dança das Lâminas",
+                tipo: "Ativa",
+                desc: "Ataque com arma branca. Se tirar 20 no dado, pode realizar um novo ataque imediatamente.",
+                dano: "Extra Atk",
+                cd: "1 Rodada"
+            }
+        ],
+        6: [
+            {
+                nome: "Instinto Assassino",
+                tipo: "Ativa",
+                desc: "Intimidação (PRE) com vantagem e +2. Sucesso: alvo recebe desvantagem em ataques por 2 turnos.",
+                dano: "Debuff",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Instinto Animal",
+                tipo: "Passiva",
+                desc: "Quando cair abaixo de 5 PV, ganha uma grande quantidade de vida temporária.",
+                dano: "+2d20 PV",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Marca do Predador",
+                tipo: "Ativa",
+                desc: "Marca um alvo absoluto (1/combate). Causa dano fixo adicional em qualquer ataque bem-sucedido.",
+                dano: "3d10",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Perseguidor das Sombras",
+                tipo: "Ativa",
+                desc: "Quando um inimigo tenta fugir, causa dano inevitável (sem esquiva/bloqueio).",
+                dano: "1d20",
+                cd: "1 Rodada"
+            }
+        ],
+        8: [
+            {
+                nome: "Predador",
+                tipo: "Ativa",
+                desc: "Combo brutal de corte. Pode ser usado simultaneamente com a Marca do Predador.",
+                dano: "3d12",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Chuva de Flechas",
+                tipo: "Ativa",
+                desc: "Dispara ao alto. Fim do turno: Dano em área de Ocultismo (espiritual). Usa Pontaria ou Ritual.",
+                dano: "4d8",
+                cd: "1 Combate"
+            }
+        ]
     },
-    "lider": { // Militar Suporte
-        1: [{ nome: "Voz de Comando", tipo: "Ativa", desc: "Aliado ganha +1d4 no próximo teste.", dano: "Buff", cd: "1 Rodada" }, { nome: "Presença Inspiradora", tipo: "Passiva", desc: "Aliados em 5m ganham +1 em Vontade.", dano: "-", cd: "-" }],
-        2: [{ nome: "Reagrupar", tipo: "Ativa", desc: "Todos os aliados podem se mover 3m sem levar ataque de oportunidade.", dano: "Move", cd: "1 Combate" }, { nome: "Tático", tipo: "Passiva", desc: "Pode usar INT para iniciativa.", dano: "-", cd: "-" }],
-        3: [{ nome: "Fogo Concentrado", tipo: "Ativa", desc: "Marca um alvo. Todos ganham +2 dano contra ele.", dano: "Marca", cd: "2 Rodadas" }, { nome: "Disciplina", tipo: "Passiva", desc: "Imune a medo.", dano: "-", cd: "-" }],
-        4: [{ nome: "Grito de Guerra", tipo: "Ativa", desc: "Inimigos em 5m testam Vontade ou ficam Abalados (-2 atk).", dano: "Debuff", cd: "1 Combate" }, { nome: "Veterano", tipo: "Passiva", desc: "+2 em História e Tática.", dano: "-", cd: "-" }],
-        5: [{ nome: "Manobra Ofensiva", tipo: "Ativa", desc: "Um aliado faz um ataque extra agora.", dano: "Ação Extra", cd: "1 Combate" }, { nome: "Exemplo", tipo: "Passiva", desc: "Quando você crita, aliados curam 1d6.", dano: "Cura", cd: "-" }],
-        6: [{ nome: "Ordem de Proteção", tipo: "Ativa", desc: "Um aliado ganha resistência a dano físico por 1 turno.", dano: "Defesa", cd: "1 Combate" }, { nome: "Estrategista", tipo: "Passiva", desc: "Grupo ganha +2 em Iniciativa.", dano: "-", cd: "-" }],
-        7: [{ nome: "Moral Elevada", tipo: "Ativa", desc: "Todos os aliados ganham +10 PV temporários.", dano: "Shield", cd: "1 Sessão" }, { nome: "Comandante", tipo: "Passiva", desc: "Sua área de comando aumenta para 10m.", dano: "-", cd: "-" }],
-        8: [{ nome: "Avanço Final", tipo: "Ativa", desc: "Todos os aliados ganham Vantagem e +1d8 dano por 1 turno.", dano: "Super Buff", cd: "1 Sessão" }, { nome: "Lenda Viva", tipo: "Passiva", desc: "Aliados nunca falham em testes de Medo perto de você.", dano: "Aura", cd: "-" }]
+    // FIM DO CAÇADOR - ESPAÇO PARA O PRÓXIMO
+    "lider": {
+        1: [
+            {
+                nome: "Comando de Avanço",
+                tipo: "Ativa",
+                desc: "Permite que um aliado próximo realize uma ação de movimento ou ataque fora do turno dele em troca da sua ação.",
+                dano: "-",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Instinto de Batalha",
+                tipo: "Passiva",
+                desc: "Na iniciativa, ganha +2 em testes de Atletismo ou Reflexo durante o primeiro turno.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Golpe Coordenado",
+                tipo: "Ativa",
+                desc: "Ataca junto com um aliado. Se ambos acertarem, adicionam dano extra ao total.",
+                dano: "+1d8",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Vigilância de Campo",
+                tipo: "Passiva",
+                desc: "Você recebe vantagem e bônus de +2 em todos os testes de Percepção.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Sinal Tático",
+                tipo: "Ativa",
+                desc: "Até 2 aliados podem se reposicionar imediatamente usando metade do seu deslocamento total.",
+                dano: "-",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Postura de Domínio",
+                tipo: "Passiva",
+                desc: "Ao acertar um crítico, inimigos menores próximos ficam intimidados e perdem o próximo turno.",
+                dano: "CC",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Formação Defensiva",
+                tipo: "Ativa",
+                desc: "Você e aliados ganham +2 em Fortitude e +2 em defesas de impacto por 2 turnos.",
+                dano: "Defensivo",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Determinação Brutal",
+                tipo: "Passiva",
+                desc: "Abaixo de 2/4 do PV, recebe +2 em testes de Luta, Atletismo ou Fortitude.",
+                dano: "Buff",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Corte Preciso",
+                tipo: "Ativa",
+                desc: "Ataque que reduz a defesa de Corte do alvo em -2 (acumula até 3 vezes).",
+                dano: "1d8 + Debuff",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Chamariz Tático",
+                tipo: "Ativa",
+                desc: "Atrai até 2 alvos. Se falharem no teste de Tática, sofrem -2 de ataque por 2 turnos.",
+                dano: "Taunt",
+                cd: "4 Turnos"
+            }
+        ],
+        6: [
+            {
+                nome: "Força do Exemplo",
+                tipo: "Ativa",
+                desc: "Após um crítico ou abate, um aliado ao alcance ganha uma ação de ataque ou movimento imediata.",
+                dano: "Extra Atk",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Resistência Implacável",
+                tipo: "Passiva",
+                desc: "Vantagem em Fortitude. Qualquer dano de impacto recebido é reduzido pela metade.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Domínio do Terreno",
+                tipo: "Ativa",
+                desc: "Você e seus aliados se movem estrategicamente sem provocar ataques de oportunidade.",
+                dano: "-",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Pressão Constante",
+                tipo: "Passiva",
+                desc: "Inimigos focados apenas em você recebem -1 em ataques se foram atingidos por você no turno anterior.",
+                dano: "Debuff",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Último Comando",
+                tipo: "Ativa",
+                desc: "Se cair a 0 PV, aliados ganham +2 dano e +1 em defesas físicas até o fim do combate.",
+                dano: "Buff Final",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Fôlego Inquebrável",
+                tipo: "Passiva",
+                desc: "Uma vez por sessão, cura-se automaticamente ao cair abaixo de 5 PV.",
+                dano: "2d6+2 Cura",
+                cd: "1 Sessão"
+            }
+        ]
     },
-    "xama": { // Curandeiro Tribal
-        1: [{ nome: "Toque da Natureza", tipo: "Ativa", desc: "Cura 1d8+Sab PV.", dano: "Cura", cd: "1 Rodada" }, { nome: "Espírito Guia", tipo: "Passiva", desc: "+2 em Sobrevivência.", dano: "-", cd: "-" }],
-        2: [{ nome: "Raízes Prisão", tipo: "Ativa", desc: "Prende inimigo (Reflexo anula).", dano: "Imóvel", cd: "2 Turnos" }, { nome: "Totem de Cura", tipo: "Ativa", desc: "Totem cura 1d4 em área por 3 turnos.", dano: "Cura/Turno", cd: "1 Combate" }],
-        3: [{ nome: "Pele de Carvalho", tipo: "Ativa", desc: "Aliado ganha +2 Defesa.", dano: "Buff Def", cd: "1 Combate" }, { nome: "Conexão", tipo: "Passiva", desc: "Sente perturbações naturais.", dano: "-", cd: "-" }],
-        4: [{ nome: "Enxame de Insetos", tipo: "Ativa", desc: "Dano em cone e distração.", dano: "2d6", cd: "1 Combate" }, { nome: "Harmonia", tipo: "Passiva", desc: "Recupera 1 PE ao curar crítico.", dano: "-", cd: "-" }],
-        5: [{ nome: "Chuva Restauradora", tipo: "Ativa", desc: "Cura todos aliados em 2d6.", dano: "Cura Área", cd: "1 Sessão" }, { nome: "Forma Bestial", tipo: "Ativa", desc: "Transforma-se em lobo (Atk corpo a corpo).", dano: "Transf.", cd: "1 Sessão" }],
-        6: [{ nome: "Fúria dos Elementos", tipo: "Ativa", desc: "3d8 dano de fogo/gelo em alvo.", dano: "3d8", cd: "2 Turnos" }, { nome: "Ancestralidade", tipo: "Passiva", desc: "+1 dado de cura.", dano: "-", cd: "-" }],
-        7: [{ nome: "Ressurreição Natural", tipo: "Ativa", desc: "Revive aliado morto recentemente com 1 PV.", dano: "Reviver", cd: "1 Sessão" }, { nome: "Vigor da Terra", tipo: "Passiva", desc: "Imune a veneno e doença.", dano: "-", cd: "-" }],
-        8: [{ nome: "Avatar da Natureza", tipo: "Ativa", desc: "Vira um Ente gigante por 3 turnos.", dano: "God Mode", cd: "1 Sessão" }, { nome: "Equilíbrio", tipo: "Passiva", desc: "Se causar dano, cura aliados próximos igual ao dano.", dano: "Vampirismo", cd: "-" }]
+    "xama": {
+        1: [
+            {
+                nome: "Língua dos Antigos",
+                tipo: "Ativa",
+                desc: "Comunica-se com espíritos/animais. Rola Sobrevivência ou Religião para pedir intervenção espiritual. Pode ser usada em si.",
+                dano: "1d6 Cura",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Transe Ancestral",
+                tipo: "Passiva",
+                desc: "Início do combate: +1 Fortitude e Resistência a Ocultismo. Meditação fora de combate restaura 1 PE.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Raízes Prendentes",
+                tipo: "Ativa",
+                desc: "Área de 3m. Inimigos devem passar em Atletismo ou ficam presos por 1 Rodada. Falha ao tentar escapar causa dano verdadeiro.",
+                dano: "1d8",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Cura do Xamã",
+                tipo: "Ativa",
+                desc: "Canaliza energias naturais para fechar ferimentos de um aliado próximo. Não pode ser usada em si.",
+                dano: "1d12 Cura",
+                cd: "3 Rodadas"
+            }
+        ],
+        3: [
+            {
+                nome: "Trovão Ancestral",
+                tipo: "Ativa",
+                desc: "Invoca um raio espiritual. Alvos usando armadura metálica sofrem dano adicional. Causa dano de Ritual.",
+                dano: "2d8 (+1d4)",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Bênção da Chuva",
+                tipo: "Passiva",
+                desc: "Perto de água/chuva: habilidades recebem +2 em cura/dano. Vantagem em Sobrevivência ou Ritual.",
+                dano: "Buff",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Totem da Fera",
+                tipo: "Ativa",
+                desc: "Cria um totem (3 turnos). Aliados a 5m recebem +2 em ataques e testes de Atletismo/Luta.",
+                dano: "Buff Área",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Espírito Guardião",
+                tipo: "Passiva",
+                desc: "Reação: Se um aliado cair a 0 PV, você impede a queda e ele permanece com 1 PV.",
+                dano: "Salvamento",
+                cd: "1 Combate"
+            }
+        ],
+        5: [
+            {
+                nome: "Espinhos Rituais",
+                tipo: "Ativa",
+                desc: "Cria área de espinhos de rosas, causando dano de Perfuração.",
+                dano: "2d12 + 1d6",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Cura de Sangue",
+                tipo: "Ativa",
+                desc: "Compartilha seus PV com um aliado de sua escolha.",
+                dano: "Cura",
+                cd: "4 Rodadas"
+            }
+        ],
+        6: [
+            {
+                nome: "Possessão Animal",
+                tipo: "Ativa",
+                desc: "Um espírito animal possui o usuário, aumentando Atletismo, Acrobacia, Sobrevivência, Reflexo, Luta, Ritual e Fortitude em +1",
+                dano: "Transform",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Sabedoria da Matriarca",
+                tipo: "Passiva",
+                desc: "Uma vez por combate, usa seus reflexos para impedir que um aliado sofra um golpe crítico.",
+                dano: "Proteção",
+                cd: "1 Combate"
+            }
+        ],
+        7: [
+            {
+                nome: "Ritual de Purificação",
+                tipo: "Ativa",
+                desc: "Remove veneno, medo ou maldição de até 3 aliados e cura-os. Pode gastar PE para aumentar a cura em +2.",
+                dano: "2d6 Cura",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Tempestade Selvagem",
+                tipo: "Ativa",
+                desc: "Convoca a fúria da natureza em área. Causa dano alto e cega os alvos por 2 turnos. Causa dano de Ritual.",
+                dano: "3d10",
+                cd: "1 Sessão"
+            }
+        ],
+        8: [
+            {
+                nome: "Encarnar Elemental",
+                tipo: "Ativa",
+                desc: "Assume forma elemental. +3 em Ritual e +1d12 de dano nos dados.",
+                dano: "+1d12",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Chamado do Grande Espírito",
+                tipo: "Passiva",
+                desc: "Revive um aliado morto em combate com metade da vida.",
+                dano: "Ressurreição",
+                cd: "1 Combate"
+            }
+        ]
     },
     "onmyoji": {
-        1: [{ nome: "Ofuda Explosivo", tipo: "Ativa", desc: "Arremessa selo mágico: 1d6+OCU dano.", dano: "1d6", cd: "1 Turno" }, { nome: "Visão Espiritual", tipo: "Passiva", desc: "Vê espíritos e invisíveis.", dano: "-", cd: "-" }],
-        2: [{ nome: "Shikigami de Papel", tipo: "Ativa", desc: "Invoca servo com 5PV que ataca.", dano: "1d4", cd: "1 Combate" }, { nome: "Barreira", tipo: "Ativa", desc: "Escudo de 10 PV em aliado.", dano: "Shield", cd: "2 Turnos" }],
-        3: [{ nome: "Selo de Paralisia", tipo: "Ativa", desc: "Inimigo testa Vontade ou paralisa 1 turno.", dano: "Stun", cd: "3 Turnos" }, { nome: "Karma", tipo: "Passiva", desc: "Quem te ataca sofre 1d4 dano.", dano: "Refletir", cd: "-" }],
-        4: [{ nome: "Invocação: Oni", tipo: "Ativa", desc: "Ogro vermelho, 20PV, Atk 1d10.", dano: "Summon", cd: "1 Sessão" }, { nome: "Purificação", tipo: "Ativa", desc: "Remove maldições e condições.", dano: "Cleanse", cd: "1 Combate" }],
-        5: [{ nome: "Pentagrama", tipo: "Ativa", desc: "Área que causa 2d6 em inimigos dentro.", dano: "2d6 Área", cd: "1 Combate" }, { nome: "Sincronia", tipo: "Passiva", desc: "Shikigamis ganham +2 Atk/Def.", dano: "-", cd: "-" }],
-        6: [{ nome: "Troca Espiritual", tipo: "Ativa", desc: "Troca de lugar com um Shikigami.", dano: "Teleport", cd: "1 Turno" }, { nome: "Dreno de Alma", tipo: "Ativa", desc: "3d6 dano, cura metade.", dano: "3d6+Cura", cd: "1 Combate" }],
-        7: [{ nome: "Invocação: Dragão", tipo: "Ativa", desc: "Invoca dragão espiritual em linha.", dano: "4d10", cd: "1 Sessão" }, { nome: "Mestre dos Selos", tipo: "Passiva", desc: "Pode usar 2 Ofudas por turno.", dano: "Double", cd: "-" }],
-        8: [{ nome: "Portão do Submundo", tipo: "Ativa", desc: "Suga inimigos (Morte ou 5d10).", dano: "Morte/Dano", cd: "1 Sessão" }, { nome: "Reencarnação", tipo: "Passiva", desc: "Se morrer, volta como espírito por 1 hora.", dano: "Ghost", cd: "-" }]
+        1: [
+            {
+                nome: "Talismã de Purificação",
+                tipo: "Ativa",
+                desc: "Arremessa um talismã espiritual. Se acertar a Pontaria (AGI), recebe um bônus de dano de +1d4.",
+                dano: "1d6 (+1d4)",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Disciplina Esotérica",
+                tipo: "Passiva",
+                desc: "Você produz talismãs constantemente durante a batalha, permitindo o uso imediato de suas técnicas.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Selo de Fogo",
+                tipo: "Ativa",
+                desc: "Explosão espiritual em área. Causa dano extra contra alvos espirituais. Requer Arremesso ou Pontaria.",
+                dano: "1d10 (+2)",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Selo de Imobilização",
+                tipo: "Ativa",
+                desc: "Fixa um selo no ambiente. Inimigos pegos devem testar Vontade/Fortitude a cada turno para tentar sair. A cada falha, recebem +1 nos teste temporariamente",
+                dano: "CC",
+                cd: "2 Rodadas"
+            }
+        ],
+        3: [
+            {
+                nome: "Pássaro de Papel: Shikigami",
+                tipo: "Ativa",
+                desc: "Invoca um familiar indestrutível que ataca com você. Permanece até ser cancelado ou o usuário cair. Não pode ser usda junto da [Possessão Shikigami]",
+                dano: "1d6+Ocu",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Talismã Vazio",
+                tipo: "Ativa",
+                desc: "Explode energia. Causa dano de Ocultismo em espíritos ou Queimadura em humanos.",
+                dano: "2d8 / 2d4",
+                cd: "3 Turnos"
+            }
+        ],
+        4: [
+            {
+                nome: "Selo de Banimento",
+                tipo: "Ativa",
+                desc: "Específico contra Yokais ou Espíritos. Tenta exorcizar o alvo usando Ocultismo (INT).",
+                dano: "3d6 Ocu",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Campo Purificador",
+                tipo: "Ativa",
+                desc: "Área de 3m² (3 turnos). Remove efeitos negativos e barra Yokais. Quem está dentro não pode atacar para fora.",
+                dano: "Barreira",
+                cd: "5 Turnos"
+            }
+        ],
+        5: [
+            {
+                nome: "Possessão Shikigami",
+                tipo: "Ativa",
+                desc: "[Requer Shikigami] Funde-se ao seu familiar, ganhando +2 em Luta, Ocultismo, Atletismo, Acrobacia e Reflexo.",
+                dano: "Self-Buff",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Sombra de Oni",
+                tipo: "Passiva",
+                desc: "+1d12 contra espíritos. Recebe +1 em Luta/Atletismo, mas sofre penalidade de -4 em Carisma com humanos.",
+                dano: "+1d12",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Dança do Deus do Fogo",
+                tipo: "Ativa",
+                desc: "[Requer Possessão] Manifesta chamas em mãos e pés. Seus ataques passam a causar dano de Queimadura.",
+                dano: "Queimadura",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Barreira do Vazio",
+                tipo: "Passiva",
+                desc: "[Requer Talismã Vazio] Selos automáticos anulam ataques de Perfuração e reduzem Impacto pela metade.",
+                dano: "Defesa",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Invocação do Caos Vazio",
+                tipo: "Ativa",
+                desc: "[Requer Barreira] Suga inimigos para uma explosão contínua. Ignora defesas e impede esquiva.",
+                dano: "1d10 p/ alvo",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Distração Familiar",
+                tipo: "Ativa",
+                desc: "[Requer Shikigami] O familiar distrai o alvo para permitir a fuga do grupo. Se o grupo ficar, causa dano.",
+                dano: "3d8",
+                cd: "1 Combate"
+            }
+        ],
+        8: [
+            {
+                nome: "Encarnação do Caos",
+                tipo: "Ativa",
+                desc: "[Requer Invocação do Caos] Inverte status opostos de todos no campo (Ex: FOR 5 / AGI 0 vira FOR 0 / AGI 5).",
+                dano: "Alteração",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Domínio Espiritual do Fogo",
+                tipo: "Passiva",
+                desc: "[Requer Dança do Deus do Fogo] Espíritos inferiores não te atacam. Causa dano passivo de fogo contra Yokais.",
+                dano: "1d12 Queim",
+                cd: "-"
+            }
+        ]
     },
     "samurai": {
-        1: [{ nome: "Corte Rápido", tipo: "Ativa", desc: "Ataque com iniciativa extra.", dano: "1d8", cd: "1 Turno" }, { nome: "Honra", tipo: "Passiva", desc: "+2 Vontade.", dano: "-", cd: "-" }],
-        2: [{ nome: "Contra-Ataque", tipo: "Ativa", desc: "Prepara defesa. Se atacado, revida.", dano: "1d10", cd: "1 Rodada" }, { nome: "Foco", tipo: "Passiva", desc: "+1 acerto com Katanas.", dano: "-", cd: "-" }],
-        3: [{ nome: "Iaijutsu", tipo: "Ativa", desc: "Saque rápido. Dano dobrado se for 1º ataque.", dano: "2d8", cd: "1 Combate" }, { nome: "Kiai", tipo: "Ativa", desc: "Grito que amedronta inimigos.", dano: "Fear", cd: "1 Combate" }],
-        4: [{ nome: "Lâmina de Vento", tipo: "Ativa", desc: "Ataque à distância (vácuo).", dano: "1d8", cd: "2 Turnos" }, { nome: "Bushido", tipo: "Passiva", desc: "Imune a charme/medo.", dano: "-", cd: "-" }],
-        5: [{ nome: "Corte em Cruz", tipo: "Ativa", desc: "Dois ataques em um.", dano: "2d10", cd: "3 Turnos" }, { nome: "Zanshin", tipo: "Passiva", desc: "Sempre alerta. Nunca surpreso.", dano: "-", cd: "-" }],
-        6: [{ nome: "Sangramento", tipo: "Passiva", desc: "Críticos causam sangramento.", dano: "DoT", cd: "-" }, { nome: "Meditação", tipo: "Ativa", desc: "Recupera PV e remove fadiga.", dano: "Cura", cd: "1 Sessão" }],
-        7: [{ nome: "Golpe Fantasma", tipo: "Ativa", desc: "Ignora armadura.", dano: "3d8", cd: "1 Combate" }, { nome: "Mestre da Espada", tipo: "Passiva", desc: "Rola dano 2 vezes e pega o melhor.", dano: "Vantagem", cd: "-" }],
-        8: [{ nome: "Flor da Morte", tipo: "Ativa", desc: "Ataca todos inimigos ao alcance.", dano: "4d10", cd: "1 Sessão" }, { nome: "Lenda", tipo: "Passiva", desc: "Se cair a 0 PV, luta mais 1 turno.", dano: "Imortal", cd: "-" }]
+        1: [
+            {
+                nome: "Postura de Corte",
+                tipo: "Passiva",
+                desc: "Se ficar parado no turno anterior, ganha +1 em Corte e +1d4 de dano (acumula até +3 e 3d4).",
+                dano: "Ate +3d4",
+                cd: "-"
+            },
+            {
+                nome: "Foco da Lâmina",
+                tipo: "Ativa",
+                desc: "Ganha vantagem no próximo ataque. Críticos desta habilidade ignoram totalmente a defesa inimiga.",
+                dano: "Crítico Puro",
+                cd: "2 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Iaijutsu",
+                tipo: "Ativa",
+                desc: "Saque rápido em linha reta (2m). Realiza teste de Corte (AGI) contra todos os alvos no caminho.",
+                dano: "1d8",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Honra Inabalável",
+                tipo: "Passiva",
+                desc: "Imune a medo, ilusão ou magia mental. Ganha +2 em Vontade (PRE) em duelos 1v1.",
+                dano: "Imunidade",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Corte Perfeito",
+                tipo: "Ativa",
+                desc: "Ataque preciso de AGI. Se o inimigo estiver com a defesa reduzida, adiciona +1d6 ao dano.",
+                dano: "2d8 (+1d6)",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Instinto de Duelo",
+                tipo: "Passiva",
+                desc: "Ao enfrentar apenas 1 inimigo corpo a corpo, recebe +1 em Reflexo e testes de Corte.",
+                dano: "Buff 1v1",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Finta Precisa",
+                tipo: "Ativa",
+                desc: "Após um acerto, gaste 1 PE para realizar um segundo ataque imediato com bônus de dano.",
+                dano: "+1d8",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Meditação de Combate",
+                tipo: "Passiva",
+                desc: "Fora de combate recupera 2 PE. Em combate, após 1 rodada parado, o próximo ataque ganha +1d8.",
+                dano: "+1d8",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Kuzu-Ryuusen (9 Cortes)",
+                tipo: "Ativa",
+                desc: "Realiza 3 testes de Corte. Cada sucesso atinge inimigos adjacentes (máx 9 acertos).",
+                dano: "1d8+1 p/ acerto",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Filosofia do Bushido",
+                tipo: "Passiva",
+                desc: "Estado de fúria honrada: quando abaixo de 1/4 dos PV, ganha +2 em Corte e Luta.",
+                dano: "Buff",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Corte Sombra",
+                tipo: "Ativa",
+                desc: "Movimentação instantânea (3m) para as costas do alvo. Ataque ignora armadura.",
+                dano: "2d12",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Retorno Tranquilo",
+                tipo: "Passiva",
+                desc: "A cada inimigo derrotado por suas mãos, você recupera 1d6 de PV e 1 PE.",
+                dano: "Dreno",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Zanshin",
+                tipo: "Ativa",
+                desc: "Estado de alerta total. Esquiva de todos os ataques com um teste de Reflexo e permite contra-ataque.",
+                dano: "Contra-atq",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Força da Tradição",
+                tipo: "Passiva",
+                desc: "Pode realizar um último ataque mesmo estando inconsciente, caindo em estado de morte logo após.",
+                dano: "Final",
+                cd: "1 Combate"
+            }
+        ],
+        8: [
+            {
+                nome: "Senbonzakura",
+                tipo: "Ativa",
+                desc: "Mil cortes instantâneos. Causa dano massivo dividido em 3 alvos ou focado em um só.",
+                dano: "3d12 ou 4d12",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Caminho do Guerreiro",
+                tipo: "Passiva",
+                desc: "A 0 PV, você ignora o desmaio por 1 rodada. Nesse turno, seus ataques causam +1d10 extra.",
+                dano: "+1d10",
+                cd: "-"
+            }
+        ]
     },
     "ninja": {
-        1: [{ nome: "Shuriken", tipo: "Ativa", desc: "Arremessa 2 shurikens.", dano: "1d4 cada", cd: "1 Turno" }, { nome: "Passo Leve", tipo: "Passiva", desc: "Movimento silencioso.", dano: "-", cd: "-" }],
-        2: [{ nome: "Bomba de Fumaça", tipo: "Ativa", desc: "Foge ou se esconde.", dano: "Furtividade", cd: "1 Combate" }, { nome: "Ataque Furtivo", tipo: "Passiva", desc: "+1d6 dano se oculto.", dano: "+1d6", cd: "-" }],
-        3: [{ nome: "Clone das Sombras", tipo: "Ativa", desc: "Cria 1 clone ilusório que distrai.", dano: "-", cd: "1 Combate" }, { nome: "Escalada", tipo: "Passiva", desc: "Anda em paredes.", dano: "-", cd: "-" }],
-        4: [{ nome: "Veneno", tipo: "Ativa", desc: "Aplica veneno na arma.", dano: "1d4/turno", cd: "1 Combate" }, { nome: "Esquiva Sobrenatural", tipo: "Passiva", desc: "Reduz dano de área pela metade.", dano: "-", cd: "-" }],
-        5: [{ nome: "Assassinato", tipo: "Ativa", desc: "Dano massivo em alvo surpreso.", dano: "4d6", cd: "1 Combate" }, { nome: "Mestre das Sombras", tipo: "Passiva", desc: "Fica invisível na penumbra.", dano: "-", cd: "-" }],
-        6: [{ nome: "Teleporte Curto", tipo: "Ativa", desc: "Move-se instantaneamente 10m.", dano: "-", cd: "2 Turnos" }, { nome: "Golpe Vital", tipo: "Passiva", desc: "Crítico em 19-20.", dano: "-", cd: "-" }],
-        7: [{ nome: "Execução", tipo: "Ativa", desc: "Mata alvo com <10 PV.", dano: "Morte", cd: "-" }, { nome: "Lótus Oculta", tipo: "Ativa", desc: "Combo aéreo.", dano: "3d8", cd: "1 Combate" }],
-        8: [{ nome: "Sombra Viva", tipo: "Passiva", desc: "Se esquivar, fica invisível.", dano: "-", cd: "-" }, { nome: "Ninjutsu Final", tipo: "Ativa", desc: "Dano massivo em área.", dano: "5d8", cd: "1 Sessão" }]
+        1: [
+            {
+                nome: "Desaparecer nas Sombras",
+                tipo: "Ativa",
+                desc: "Fica invisível até realizar um ataque ou ser detectado. Requer teste de Furtividade (AGI).",
+                dano: "Invisível",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Treinamento Secreto",
+                tipo: "Passiva",
+                desc: "Ganha +2 em Furtividade/Acrobacia. Recebe +1 adicional se estiver em cobertura ou penumbra.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Shuriken Tripla",
+                tipo: "Ativa",
+                desc: "Arremessa até 3 projéteis em alvos diferentes (ou no mesmo). Cada acerto causa 1d6.",
+                dano: "Até 3d6",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Movimento Fantasma",
+                tipo: "Passiva",
+                desc: "Você é mestre em desengajar. Nunca provoca ataques de oportunidade ao sair do alcance corpo a corpo.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Golpe Envenenado",
+                tipo: "Ativa",
+                desc: "Encanta a lâmina. Se o alvo falhar no teste de Fortitude, sofre dano contínuo no próximo turno.",
+                dano: "2d8 (+1d6)",
+                cd: "2 Rodada"
+            },
+            {
+                nome: "Reflexo Sobrenatural",
+                tipo: "Passiva",
+                desc: "Sempre age primeiro em rodadas surpresa. +1 em Reflexo/Acrobacia se estiver sem armadura pesada.",
+                dano: "Iniciativa",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Ataque Mortal Silencioso",
+                tipo: "Ativa",
+                desc: "Ataque vindo de furtividade. Se causar um crítico, o inimigo fica paralisado por 1 turno.",
+                dano: "2d10 + CC",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Ofício das Sombras",
+                tipo: "Passiva",
+                desc: "Armas pequenas ou improvisadas (kunai/garrote) causam +1d6 extra se usadas furtivamente.",
+                dano: "+1d6",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Combo do Vento",
+                tipo: "Ativa",
+                desc: "Avanço com corte giratório que atinge todos os inimigos em uma linha reta.",
+                dano: "2d12",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Aproveitador Silencioso",
+                tipo: "Passiva",
+                desc: "Sua velocidade é absurda. Você ganha +1 ação de combate e +1 ação de movimento por turno.",
+                dano: "Extra Ação",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Desarme Preciso",
+                tipo: "Ativa",
+                desc: "Ataque focado em desarmar o alvo com sua Furtividade. O alvo pode resistir com um teste de Reflexo",
+                dano: "Desarme",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Mestre dos Disfarces",
+                tipo: "Passiva",
+                desc: "Pode copiar uma habilidade passiva de nível inferior das classes: Samurai, Policial, Artista ou Cultista.",
+                dano: "Cópia",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Katon: Fogo Secreto",
+                tipo: "Ativa",
+                desc: "Explosão de fogo (bola de fogo). Usa Ocultismo (INT) ou Arremesso (FOR). Causa dano em área.",
+                dano: "2d10 (+1d6)",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Assassinato Silencioso",
+                tipo: "Passiva",
+                desc: "Em duelos 1v1, o inimigo sofre penalidade de -1 em todos os testes de resistência contra você.",
+                dano: "Debuff",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Golpe das Sombras",
+                tipo: "Ativa",
+                desc: "Teleporta-se para as costas de um alvo em qualquer distância e aplica um combo devastador.",
+                dano: "4d8",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Corpo de Névoa",
+                tipo: "Passiva",
+                desc: "Uma vez por sessão, anula um golpe mortal, sumindo em fumaça e retornando no turno seguinte.",
+                dano: "Evasão",
+                cd: "1 Sessão"
+            }
+        ]
     },
     "mongol": {
-        1: [{ nome: "Montaria", tipo: "Passiva", desc: "Começa com cavalo/moto. +2 Atk montado.", dano: "-", cd: "-" }, { nome: "Arco Composto", tipo: "Ativa", desc: "Tiro montado sem penalidade.", dano: "1d8", cd: "-" }],
-        2: [{ nome: "Investida", tipo: "Ativa", desc: "Corre e ataca com bônus.", dano: "1d10+2", cd: "1 Turno" }, { nome: "Sobrevivente", tipo: "Passiva", desc: "+2 Fortitude.", dano: "-", cd: "-" }],
-        3: [{ nome: "Laço", tipo: "Ativa", desc: "Prende alvo.", dano: "Imóvel", cd: "2 Turnos" }, { nome: "Saqueador", tipo: "Passiva", desc: "Encontra mais itens/dinheiro.", dano: "-", cd: "-" }],
-        4: [{ nome: "Grito da Horda", tipo: "Ativa", desc: "Buff de velocidade p/ grupo.", dano: "Speed", cd: "1 Combate" }, { nome: "Tiro Partida", tipo: "Ativa", desc: "Ataca enquanto foge.", dano: "1d8", cd: "1 Turno" }],
-        5: [{ nome: "Pele de Ferro", tipo: "Passiva", desc: "RD 2 contra físico.", dano: "-", cd: "-" }, { nome: "Atropelar", tipo: "Ativa", desc: "Dano ao passar por cima.", dano: "2d8", cd: "1 Turno" }],
-        6: [{ nome: "Chuva de Flechas", tipo: "Ativa", desc: "Atk em cone.", dano: "2d6", cd: "1 Combate" }, { nome: "Khan", tipo: "Passiva", desc: "Aliados montados ganham +2.", dano: "-", cd: "-" }],
-        7: [{ nome: "Imparável", tipo: "Ativa", desc: "Remove lentidão/paralisia.", dano: "Cleanse", cd: "1 Combate" }, { nome: "Resistência Lendária", tipo: "Passiva", desc: "+20 PV Max.", dano: "-", cd: "-" }],
-        8: [{ nome: "Conquistador", tipo: "Ativa", desc: "Dano triplicado em estruturas/veículos.", dano: "Siege", cd: "-" }, { nome: "Espírito da Estepe", tipo: "Passiva", desc: "Regenera vida se mover.", dano: "Regen", cd: "-" }]
+        1: [
+            {
+                nome: "Espírito do Clã",
+                tipo: "Passiva",
+                desc: "Aliados adjacentes a você ganham +2 ES e +1 de Defesa contra dano de Corte.",
+                dano: "Buff Área",
+                cd: "-"
+            },
+            {
+                nome: "Postura da Lança",
+                tipo: "Passiva",
+                desc: "Ao usar armas de haste (lanças/alabardas), ganha +1 Defesa contra Corte e +1 na perícia Corte.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Golpe de Haste",
+                tipo: "Ativa",
+                desc: "Ataque com arma de haste que, além do dano, empurra o alvo por 1 metro.",
+                dano: "1d8 + Push",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Pele Endurecida",
+                tipo: "Passiva",
+                desc: "Sua pele é resistente como couro. Reduz em -2 todo dano de Corte recebido.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Investida Montada",
+                tipo: "Ativa",
+                desc: "Ataque realizado enquanto utiliza um meio de transporte ou montaria.",
+                dano: "1d12",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Vínculo da Montaria",
+                tipo: "Passiva",
+                desc: "Enquanto montado, você ganha +4 ES e +1 de defesa contra dano de Impacto.",
+                dano: "+4 ES",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Muralha Tribal",
+                tipo: "Ativa",
+                desc: "Aliados adjacentes recebem +4 ES e +1 de defesa contra Corte (Não acumulativo).",
+                dano: "Buff Grupo",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Corpo Forjado pelo Tempo",
+                tipo: "Passiva",
+                desc: "Sempre que recebe dano de Corte: reduz o dano em 1 e ganha +1 ES (Acumulativo).",
+                dano: "Scaling",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Varredura de Alabarda",
+                tipo: "Ativa",
+                desc: "Um golpe circular massivo que atinge múltiplos inimigos em um arco amplo.",
+                dano: "2d10",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Coração do Bando",
+                tipo: "Passiva",
+                desc: "Aliados no alcance ganham +1 ES por nível e tornam-se imunes a serem empurrados.",
+                dano: "Buff Nível",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Chamado de Guerra",
+                tipo: "Ativa",
+                desc: "Aliados ganham +8 ES. Você recebe a condição 'Taunt' (Provocar) por 2 turnos.",
+                dano: "Taunt",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Sangue Resistente",
+                tipo: "Passiva",
+                desc: "Quando sua vida cai abaixo de metade (1/2 PV), reduz todo dano físico recebido em -2.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Avanço do Bando",
+                tipo: "Ativa",
+                desc: "Aliados ganham +1 ação de movimento e defesa de Impacto. Você causa dano alto em alvo único.",
+                dano: "3d10",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Defesa Coletiva",
+                tipo: "Passiva",
+                desc: "Uma vez por turno, você pode escolher receber o dano no lugar de um aliado adjacente.",
+                dano: "Proteger",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Espírito Ancestral",
+                tipo: "Ativa",
+                desc: "Por 3 rodadas: aliados ganham +12 ES, +3 def. Corte e o usuário não pode morrer.",
+                dano: "Imortalidade",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Khan Imortal",
+                tipo: "Passiva",
+                desc: "Ao chegar a 0 PV, sobrevive com 10 PV. Remove medo e dá +5 ES aos aliados.",
+                dano: "Reviver",
+                cd: "1 Sessão"
+            }
+        ]
     },
     "militar": {
-        1: [{ nome: "Treinamento Básico", tipo: "Passiva", desc: "+1 acerto armas fogo.", dano: "-", cd: "-" }, { nome: "Rajada", tipo: "Ativa", desc: "3 tiros, -2 acerto, +1d6 dano.", dano: "+1d6", cd: "1 Turno" }],
-        2: [{ nome: "Cobertura", tipo: "Ativa", desc: "Aumenta defesa se imóvel.", dano: "+4 Def", cd: "-" }, { nome: "Granada Frag", tipo: "Ativa", desc: "Explosão pequena.", dano: "2d6", cd: "1 Combate" }],
-        3: [{ nome: "Kit Médico", tipo: "Ativa", desc: "Cura ferimento leve.", dano: "1d8", cd: "1 Combate" }, { nome: "Colete", tipo: "Passiva", desc: "+2 Defesa contra balas.", dano: "-", cd: "-" }],
-        4: [{ nome: "Supressão", tipo: "Ativa", desc: "Inimigos na área ganham -2 Atk.", dano: "Debuff", cd: "1 Turno" }, { nome: "Recarregar Rápido", tipo: "Passiva", desc: "Recarrega como ação livre.", dano: "-", cd: "-" }],
-        5: [{ nome: "Tiro de Precisão", tipo: "Ativa", desc: "Mira por 1 turno, dano max.", dano: "Max Dmg", cd: "2 Turnos" }, { nome: "Disciplina de Ferro", tipo: "Passiva", desc: "Imune a controle mental.", dano: "-", cd: "-" }],
-        6: [{ nome: "Lança-Granadas", tipo: "Ativa", desc: "Explosão média.", dano: "3d8", cd: "1 Combate" }, { nome: "Pelotão", tipo: "Passiva", desc: "+1 Def por aliado adjacente.", dano: "-", cd: "-" }],
-        7: [{ nome: "Juggernaut", tipo: "Ativa", desc: "Reduz todo dano pela metade por 2 turnos.", dano: "50% Res", cd: "1 Sessão" }, { nome: "Arsenal", tipo: "Passiva", desc: "Pode carregar 3 armas principais.", dano: "-", cd: "-" }],
-        8: [{ nome: "Ataque Aéreo", tipo: "Ativa", desc: "Chama bombardeio.", dano: "6d10", cd: "1 Sessão" }, { nome: "Último Homem", tipo: "Passiva", desc: "Dobra dano se for o único em pé.", dano: "Dobro", cd: "-" }]
+        1: [
+            {
+                nome: "Presença Ameaçadora",
+                tipo: "Passiva",
+                desc: "Sua postura intimida oponentes. Inimigos adjacentes sofrem -1 em ataques contra seus aliados.",
+                dano: "Debuff Aura",
+                cd: "-"
+            },
+            {
+                nome: "Postura de Combate",
+                tipo: "Ativa",
+                desc: "Entra em modo defensivo até o próximo turno. Ganha +2 em Defesa de Impacto e em Fortitude.",
+                dano: "Defesa",
+                cd: "2 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Golpe de Supressão",
+                tipo: "Ativa",
+                desc: "Ataque pesado que, além do dano, obriga o alvo a focar seus ataques em você (Taunt).",
+                dano: "1d8 + Taunt",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Casca Grossa",
+                tipo: "Passiva",
+                desc: "Treinamento rigoroso. Reduz permanentemente todo dano físico (Impacto, Corte e Perfuração) em -1.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Avanço Tático",
+                tipo: "Ativa",
+                desc: "Você avança agressivamente contra um inimigo para quebrar sua formação.",
+                dano: "1d12",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Firme Como Aço",
+                tipo: "Passiva",
+                desc: "Ignora um efeito de controle (queda, empurrão ou stun leve) uma vez por combate.",
+                dano: "Anti-CC",
+                cd: "1 Combate"
+            }
+        ],
+        4: [
+            {
+                nome: "Linha de Frente",
+                tipo: "Ativa",
+                desc: "Cria uma barreira tática: Aliados posicionados atrás de você recebem -2 de dano até seu próximo turno.",
+                dano: "Proteção",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Corpo Treinado",
+                tipo: "Passiva",
+                desc: "Sua constituição física converte defesa em vitalidade. Ganha +1 de PV para cada ponto de Defesa em Corte.",
+                dano: "+PV",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Impacto Demolidor",
+                tipo: "Ativa",
+                desc: "Ataque potente. Se o alvo já estiver sob efeito de Taunt, ele sofre desvantagem no próximo ataque.",
+                dano: "2d10 + Debuff",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Provocação Instintiva",
+                tipo: "Passiva",
+                desc: "Sempre que um inimigo atacar um aliado adjacente, você ativa Taunt automaticamente contra aquele inimigo.",
+                dano: "Auto-Taunt",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Grito de Guerra",
+                tipo: "Ativa",
+                desc: "Inimigos em alcance médio devem passar em Vontade ou sofrem Taunt e perdem um dado de ataque por 2 turnos.",
+                dano: "CC em Área",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Muralha Humana",
+                tipo: "Passiva",
+                desc: "Uma vez por turno, você absorve metade do dano que um aliado adjacente receberia.",
+                dano: "Absorção",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Veterano de Guerra",
+                tipo: "Passiva",
+                desc: "Sua experiência permite ler o combate antes de todos. Sempre começa no topo da iniciativa.",
+                dano: "Iniciativa Max",
+                cd: "-"
+            },
+            {
+                nome: "Não há onde se esconder",
+                tipo: "Passiva",
+                desc: "Seus tiros ignoram penalidade de cobertura leve e recebem +2 em Pontaria.",
+                dano: "+2 Pontaria",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Terror do Campo de Batalha",
+                tipo: "Ativa",
+                desc: "Modo Berserker Militar: Ganha +2 ataques por turno e bônus de dano em todas as habilidades ofensivas.",
+                dano: "+2d8",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Última Linha",
+                tipo: "Passiva",
+                desc: "Se for o último vivo do grupo, ganha 50 PV temporários e bônus massivo de dano.",
+                dano: "50 PV + 2d6",
+                cd: "-"
+            }
+        ]
     },
     "cavaleiro": {
-        1: [{ nome: "Escudo Torre", tipo: "Passiva", desc: "+3 Defesa com escudo.", dano: "-", cd: "-" }, { nome: "Provocar", tipo: "Ativa", desc: "Obriga inimigo a te atacar.", dano: "Taunt", cd: "1 Turno" }],
-        2: [{ nome: "Armadura Pesada", tipo: "Passiva", desc: "RD 3 físico, -2 Desloc.", dano: "-", cd: "-" }, { nome: "Golpe de Escudo", tipo: "Ativa", desc: "Dano + empurrão.", dano: "1d4+Push", cd: "1 Turno" }],
-        3: [{ nome: "Guardião", tipo: "Ativa", desc: "Recebe dano no lugar de adjacente.", dano: "Protect", cd: "Reação" }, { nome: "Vigor", tipo: "Passiva", desc: "+1 PV por nível.", dano: "-", cd: "-" }],
-        4: [{ nome: "Desarmar", tipo: "Ativa", desc: "Tira arma do inimigo.", dano: "-", cd: "1 Combate" }, { nome: "Baluarte", tipo: "Passiva", desc: "Não pode ser derrubado.", dano: "-", cd: "-" }],
-        5: [{ nome: "Fúria Santa", tipo: "Ativa", desc: "Dano radiante extra.", dano: "+1d8", cd: "1 Combate" }, { nome: "Aura de Proteção", tipo: "Passiva", desc: "+1 Def aliados em 3m.", dano: "-", cd: "-" }],
-        6: [{ nome: "Recuperar Fôlego", tipo: "Ativa", desc: "Cura 50% dos PV.", dano: "Cura", cd: "1 Sessão" }, { nome: "Contra-Golpe", tipo: "Passiva", desc: "Se errar ele, ele bate de volta.", dano: "1d8", cd: "-" }],
-        7: [{ nome: "Investida Gloriosa", tipo: "Ativa", desc: "Dano e derruba inimigos em linha.", dano: "3d8", cd: "1 Combate" }, { nome: "Inquebrável", tipo: "Passiva", desc: "Imune a Críticos.", dano: "-", cd: "-" }],
-        8: [{ nome: "Invencível", tipo: "Ativa", desc: "Imune a dano por 1 turno.", dano: "Imune", cd: "1 Sessão" }, { nome: "Campeão", tipo: "Passiva", desc: "+2 em todos atributos.", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Juramento do Cavaleiro",
+                tipo: "Passiva",
+                desc: "Restrição: Só pode usar Espada + Escudo e Armadura Metálica. Em troca, recebe +2 em todas as defesas físicas.",
+                dano: "Defesa +2",
+                cd: "-"
+            },
+            {
+                nome: "Postura Defensiva",
+                tipo: "Ativa",
+                desc: "Entra em posição de guarda total. Ganha +1 de defesa física até sofrer o próximo ataque inimigo.",
+                dano: "Buff Def",
+                cd: "2 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Provocação Honrada",
+                tipo: "Ativa",
+                desc: "Obriga até 2 inimigos a te atacarem. Se eles ignorarem você, sofrem penalidade de -2 no ataque contra outros.",
+                dano: "Taunt",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Couraça de Ferro",
+                tipo: "Passiva",
+                desc: "Sua resistência natural é aprimorada. Ganha permanentemente +5 de ES e +2 de PV em todos os combates.",
+                dano: "+5 ES / +2 PV",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Golpe com Escudo",
+                tipo: "Ativa",
+                desc: "Ataque de impacto massivo. Se acertar, o alvo fica atordoado e perde a capacidade de contra-atacar por 1 turno.",
+                dano: "1d12 + Stun",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Defesa Inabalável",
+                tipo: "Passiva",
+                desc: "Cada bloqueio bem-sucedido fortalece sua guarda. Ganha +1 ES até o fim do combate (acumula até 3).",
+                dano: "+ES (Max 3)",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Muralha Viva",
+                tipo: "Ativa",
+                desc: "Torna-se um obstáculo: fornece cobertura total a aliados atrás de você e reduz dano físico recebido em -2.",
+                dano: "Redução -2",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Corpo Blindado",
+                tipo: "Passiva",
+                desc: "Com armadura metálica: Imune a medo, atordoamento, paralisia, veneno e loucura. +2 Defesa contra Corte.",
+                dano: "Imunidades",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Corte de Retaliação",
+                tipo: "Ativa",
+                desc: "Ataque cortante. Se for usado como um contra-ataque, adiciona dano extra ao golpe.",
+                dano: "2d10 (+1d6)",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Guarda do Escudo",
+                tipo: "Passiva",
+                desc: "Proteção abnegada: Uma vez por turno, pode escolher sofrer todo o dano que um aliado adjacente receberia.",
+                dano: "Redirecionar",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Desafio do Cavaleiro",
+                tipo: "Ativa",
+                desc: "Um duelo forçado. O alvo deve te atacar por 2 turnos; se atacar outros, sofre -2 em perícias de PRE.",
+                dano: "Duelo CC",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Resistência Implacável",
+                tipo: "Passiva",
+                desc: "Abaixo de 1/2 PV: Reduz todo dano físico em -2 e torna-se imune a ser derrubado ou empurrado.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Avanço com Escudo",
+                tipo: "Ativa",
+                desc: "Investida que abre caminho: empurra inimigos e garante +3 Defesa Física até o próximo ataque recebido.",
+                dano: "3d10 + Push",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Presença Ameaçadora",
+                tipo: "Passiva",
+                desc: "Inimigos adjacentes são intimidados, sofrendo -1 em ataques e -1 em testes de resistência contra você.",
+                dano: "Debuff Aura",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Coração de Aço",
+                tipo: "Ativa",
+                desc: "Estado de invulnerabilidade: você não pode cair abaixo de 1 PV por 3 turnos e causa Taunt em área constante.",
+                dano: "Imortalidade",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Bastão da Honra",
+                tipo: "Passiva",
+                desc: "A primeira vez que chegaria a 0 PV, permanece com 15 PV e ganha +2 em todas as defesas físicas.",
+                dano: "Second Wind",
+                cd: "1 Combate"
+            }
+        ]
     },
     "gambler": {
-        1: [{ nome: "Cara ou Coroa", tipo: "Ativa", desc: "Cara: +2 Atk. Coroa: -2 Atk.", dano: "Sorte", cd: "1 Turno" }, { nome: "Cartas Afiadas", tipo: "Passiva", desc: "Baralhos são armas letais.", dano: "1d6", cd: "-" }],
-        2: [{ nome: "Aposta Alta", tipo: "Ativa", desc: "Dobra o dano ou falha crítica.", dano: "Risco", cd: "2 Turnos" }, { nome: "Blefe", tipo: "Passiva", desc: "+4 Enganação.", dano: "-", cd: "-" }],
-        3: [{ nome: "Roleta Russa", tipo: "Ativa", desc: "1d6. Se cair 6: 4d10 dano. 1: Toma 1d10.", dano: "Extremo", cd: "1 Combate" }, { nome: "Sorte de Principiante", tipo: "Passiva", desc: "Pode re-rolar 1 dado/sessão.", dano: "-", cd: "-" }],
-        4: [{ nome: "Dado Viciado", tipo: "Ativa", desc: "Define o resultado de um d6.", dano: "Manipular", cd: "1 Sessão" }, { nome: "Malandragem", tipo: "Passiva", desc: "Pode roubar como ação livre.", dano: "-", cd: "-" }],
-        5: [{ nome: "Jackpot", tipo: "Ativa", desc: "Se tirar 20, ganha ação extra.", dano: "-", cd: "-" }, { nome: "Lançar Moedas", tipo: "Ativa", desc: "Dano em área cone.", dano: "2d6", cd: "1 Combate" }],
-        6: [{ nome: "Destino Cruzado", tipo: "Ativa", desc: "Troca de PV com o alvo.", dano: "Troca", cd: "1 Sessão" }, { nome: "Sortudo", tipo: "Passiva", desc: "+1 em todos os testes.", dano: "-", cd: "-" }],
-        7: [{ nome: "Coringa", tipo: "Ativa", desc: "Copia uma skill de aliado por 1 turno.", dano: "Copy", cd: "1 Combate" }, { nome: "Oportunista", tipo: "Passiva", desc: "Critico em 18-20.", dano: "-", cd: "-" }],
-        8: [{ nome: "All In", tipo: "Ativa", desc: "Gasta todo ouro/mana/recurso: Dano massivo.", dano: "Variável", cd: "1 Sessão" }, { nome: "Anjo da Sorte", tipo: "Passiva", desc: "Nunca falha criticamente (1 vira 2).", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Sorte do Apostador",
+                tipo: "Passiva",
+                desc: "A sorte sorri para os audazes. Sempre que tirar o valor máximo em um dado de ataque, você adiciona +1d4 de dano extra.",
+                dano: "+1d4 Extra",
+                cd: "-"
+            },
+            {
+                nome: "Tudo ou Nada",
+                tipo: "Ativa",
+                desc: "Escolha um número de 1 a 6 e role 1d6. Acerto: Dobra seu próximo dano. Falha: Você sofre o dobro de dano no próximo ataque recebido.",
+                dano: "x2 ou Risco",
+                cd: "4 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Dado Marcado",
+                tipo: "Ativa",
+                desc: "Ataque padrão com 1d8. Se o resultado for um acerto crítico, o Gambler adiciona +1d6 de dano de ocultismo.",
+                dano: "1d8 (+1d6)",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Presságio Favorável",
+                tipo: "Passiva",
+                desc: "Uma vez por turno, você pode rerrolar um dado de dano ou de habilidade e escolher o maior resultado.",
+                dano: "Rerrolagem",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Golpe Arriscado",
+                tipo: "Ativa",
+                desc: "Um ataque pesado de 2d8. Porém, se o ataque falhar, o Gambler sofre 1d6 de dano verdadeiro (ignora defesa).",
+                dano: "2d8 / 1d6",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Sorte Instável",
+                tipo: "Passiva",
+                desc: "Ao sofrer dano, role 1d6. Se tirar 6: cura metade do dano. Se tirar 1: sofre +1d4 de dano verdadeiro.",
+                dano: "Cura/Risco",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Crítico Premiado",
+                tipo: "Ativa",
+                desc: "Ação Livre: Força o resultado do dado para um Crítico Automático no seu próximo ataque neste turno.",
+                dano: "Auto-Crítico",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Dados Explosivos",
+                tipo: "Passiva",
+                desc: "Sempre que rolar o valor máximo em qualquer dado de dano, role um dado extra do mesmo tipo e some ao total.",
+                dano: "Explosão",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Roleta da Morte",
+                tipo: "Ativa",
+                desc: "Ação Livre (1d4): 1=Falha; 2=1d4 de dano; 3=2d10 de dano; 4=2d12 de dano. Aplica-se ao próximo ataque.",
+                dano: "Variável",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Vício em Risco",
+                tipo: "Passiva",
+                desc: "A adrenalina te move. Sempre que causar dano máximo em um dado, você ganha +1 ação livre imediata.",
+                dano: "Extra Ação",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Aposta Fatal",
+                tipo: "Ativa",
+                desc: "Ataque massivo em alvo único. Se o resultado do dado for um crítico, adiciona +1d12 ao montante final.",
+                dano: "2d12 (+1d12)",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Sangue Frio",
+                tipo: "Passiva",
+                desc: "Quanto pior a situação, mais você arrisca. Abaixo de 1/2 PV, adiciona +1d8 para cada dado de dano rolado.",
+                dano: "+Xd8",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Tudo na Mesa",
+                tipo: "Ativa",
+                desc: "Ataque de 3d10. Se nenhum dos dados resultar em 10, você fica desarmado e atordoado por 1 rodada.",
+                dano: "3d10",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Sorte do Diabo",
+                tipo: "Passiva",
+                desc: "Uma vez por combate, você pode transformar qualquer erro (falha) em um acerto normal automaticamente.",
+                dano: "Garantia",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Jackpot",
+                tipo: "Ativa",
+                desc: "Ataque final de 4d8. Pelo efeito de Jackpot, cada dado que cair no valor máximo gera +1d8 extra infinitamente.",
+                dano: "4d8 + Infinito",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Favor da Fortuna",
+                tipo: "Passiva",
+                desc: "Uma vez por sessão, escolha: transformar um ataque em crítico ou maximizar todos os dados de dano de um golpe.",
+                dano: "Max Damage",
+                cd: "1 Sessão"
+            }
+        ]
     },
     "mercenario": {
-        1: [{ nome: "Pagamento Adiantado", tipo: "Passiva", desc: "Começa com +Dinheiro. +2 Negociação.", dano: "-", cd: "-" }, { nome: "Golpe Sujo", tipo: "Ativa", desc: "Joga areia/chuta baixo. Cega 1 turno.", dano: "Debuff", cd: "1 Combate" }],
-        2: [{ nome: "Mestre de Armas", tipo: "Passiva", desc: "Proficiente com tudo.", dano: "-", cd: "-" }, { nome: "Tiro Rápido", tipo: "Ativa", desc: "Atk distância sem mirar.", dano: "1d6", cd: "-" }],
-        3: [{ nome: "Contrato", tipo: "Ativa", desc: "Escolhe um alvo. +2 dano nele.", dano: "Marca", cd: "1 Combate" }, { nome: "Peleja", tipo: "Passiva", desc: "+1 Def se tiver >2 inimigos perto.", dano: "-", cd: "-" }],
-        4: [{ nome: "Granada de Luz", tipo: "Ativa", desc: "Cega área.", dano: "Cegueira", cd: "1 Combate" }, { nome: "Cochilo Tático", tipo: "Ativa", desc: "Cura 1d10 fora de combate.", dano: "Cura", cd: "-" }],
-        5: [{ nome: "Lobo Solitário", tipo: "Passiva", desc: "+2 Dano se longe de aliados.", dano: "-", cd: "-" }, { nome: "Executar Contrato", tipo: "Ativa", desc: "Dano extra em alvo marcado.", dano: "+2d6", cd: "1 Turno" }],
-        6: [{ nome: "Escudo Humano", tipo: "Ativa", desc: "Usa inimigo como escudo.", dano: "Grapple", cd: "1 Combate" }, { nome: "Profissional", tipo: "Passiva", desc: "Não se abala. Imune medo.", dano: "-", cd: "-" }],
-        7: [{ nome: "Massacre", tipo: "Ativa", desc: "Ataca todos adjacentes.", dano: "Whirlwind", cd: "1 Combate" }, { nome: "Rico", tipo: "Passiva", desc: "Pode subornar inimigos (NPCs).", dano: "-", cd: "-" }],
-        8: [{ nome: "Exército de Um Homem", tipo: "Ativa", desc: "Dobra ataques por 1 turno.", dano: "Double", cd: "1 Sessão" }, { nome: "Lenda do Submundo", tipo: "Passiva", desc: "Inimigos fracos fogem de você.", dano: "Medo", cd: "-" }]
+        1: [
+            {
+                nome: "Instinto de Sobrevivência",
+                tipo: "Passiva",
+                desc: "Ao ficar abaixo de 50% dos PV, ganha instantaneamente +10 ES. Ocorre uma vez por combate.",
+                dano: "+10 ES",
+                cd: "-"
+            },
+            {
+                nome: "Ataque Oportunista",
+                tipo: "Ativa",
+                desc: "Ataque com bônus de +1d6. Se não houver aliados adjacentes, causa +2 de dano adicional.",
+                dano: "Atk + 1d6 (+2)",
+                cd: "2 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Disparo Controlado",
+                tipo: "Ativa",
+                desc: "Ataque à distância. Se o tiro atingir o alvo, você gera +4 ES para si mesmo.",
+                dano: "1d8 (+4 ES)",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Casca Grossa",
+                tipo: "Passiva",
+                desc: "Veterano de guerrilha. Enquanto possuir qualquer quantidade de ES, reduz todo dano recebido em -2.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Golpe de Contenção",
+                tipo: "Ativa",
+                desc: "Ataque corpo a corpo. Se atingir, o inimigo sofre um debuff de -2 em dano até o próximo turno dele.",
+                dano: "2d6 + Debuff",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Adaptável",
+                tipo: "Passiva",
+                desc: "Ganha +3 PV Temporários (1x por turno) sempre que trocar o tipo de ataque (distância para corpo a corpo ou vice-versa).",
+                dano: "+3 PV Temp",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Rajada de Cobertura",
+                tipo: "Ativa",
+                desc: "Ataque à distância pesado. Após disparar, você ganha +6 ES para se proteger.",
+                dano: "2d8 (+6 ES)",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Postura Defensiva",
+                tipo: "Passiva",
+                desc: "Foco na guarda. Se você não realizar nenhuma ação de movimento no turno, ganha +2 em Defesas físicas.",
+                dano: "Defesa +2",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Sobrevivência Brutal",
+                tipo: "Ativa",
+                desc: "Buff de combate: Cada ataque bem-sucedido gera +2 ES (acumula até 10 ES). Dura até o fim da luta.",
+                dano: "Geração ES",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Resistência de Campo",
+                tipo: "Passiva",
+                desc: "Uma vez por combate, ao chegar a 0 PV, você ignora a queda, fica com 1 PV e ganha +5 ES.",
+                dano: "Salvamento",
+                cd: "1 Combate"
+            }
+        ],
+        6: [
+            {
+                nome: "Ataque de Pressão",
+                tipo: "Ativa",
+                desc: "Ataque de alto impacto. Se estiver sem aliados por perto, gera +6 ES adicionais no acerto.",
+                dano: "2d12 (+6 ES)",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Duro de Matar",
+                tipo: "Passiva",
+                desc: "Enquanto tiver ES, recebe vantagem em Fortitude contra morte, sangramento ou efeitos físicos.",
+                dano: "Vantagem",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Último Cartucho",
+                tipo: "Ativa",
+                desc: "Disparo desesperado de alto dano. Ganha +8 ES, mas não pode atacar no turno seguinte.",
+                dano: "3d10",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Veterano Solitário",
+                tipo: "Passiva",
+                desc: "Se não houver aliados em até 6m: Recebe +2 em Defesas físicas e causa +2 de dano fixo.",
+                dano: "Buff Solo",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Contrato Até o Fim",
+                tipo: "Ativa",
+                desc: "Estado final: Cada dano sofrido gera +4 ES e cada ataque causa +1d8 (Limite de 30 ES).",
+                dano: "+1d8 Extra",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Inquebrável",
+                tipo: "Passiva",
+                desc: "1x por sessão: reduz um dano fatal a 0, ganha +10 PV Temp, +4 Atletismo e desengajamento livre.",
+                dano: "Imunidade",
+                cd: "1 Sessão"
+            }
+        ]
     },
     "mafioso": {
-        1: [{ nome: "Intimidação", tipo: "Ativa", desc: "Amedronta alvo.", dano: "Debuff", cd: "1 Turno" }, { nome: "Família", tipo: "Passiva", desc: "Tem contatos na cidade.", dano: "-", cd: "-" }],
-        2: [{ nome: "Tiro à Queima-Roupa", tipo: "Ativa", desc: "Dano extra se adjacente.", dano: "+1d6", cd: "1 Turno" }, { nome: "Estilo", tipo: "Passiva", desc: "+2 Presença.", dano: "-", cd: "-" }],
-        3: [{ nome: "Capanga", tipo: "Ativa", desc: "Invoca um NPC capanga.", dano: "Summon", cd: "1 Sessão" }, { nome: "Negócios", tipo: "Passiva", desc: "Desconto em lojas.", dano: "-", cd: "-" }],
-        4: [{ nome: "Metralhadora Thompson", tipo: "Ativa", desc: "Cone de balas.", dano: "3d6", cd: "1 Combate" }, { nome: "Respeito", tipo: "Passiva", desc: "Inimigos hesitam atacar (Vontade).", dano: "-", cd: "-" }],
-        5: [{ nome: "Vendetta", tipo: "Ativa", desc: "Se apanhar, ganha bônus contra o agressor.", dano: "+2 Atk", cd: "-" }, { nome: "Padrinho", tipo: "Passiva", desc: "Buffa aliados próximos.", dano: "+1 Dano", cd: "-" }],
-        6: [{ nome: "Molotov", tipo: "Ativa", desc: "Área de fogo persistente.", dano: "2d6/t", cd: "1 Combate" }, { nome: "Lealdade", tipo: "Passiva", desc: "Imune a traição/charme.", dano: "-", cd: "-" }],
-        7: [{ nome: "Carro Bomba", tipo: "Ativa", desc: "Explosão massiva se houver veículo.", dano: "6d6", cd: "1 Sessão" }, { nome: "Omertà", tipo: "Passiva", desc: "Nunca revela segredos (Imune interrogatório).", dano: "-", cd: "-" }],
-        8: [{ nome: "Don", tipo: "Ativa", desc: "Chama a gangue toda (3 capangas).", dano: "Summon x3", cd: "1 Sessão" }, { nome: "Rei do Crime", tipo: "Passiva", desc: "Acesso a itens proibidos.", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Punhos da Família",
+                tipo: "Passiva",
+                desc: "Rancor compensa. Sempre que atacar um inimigo que já foi atingido por você neste combate, causa +1 de dano fixo.",
+                dano: "+1 Dano",
+                cd: "-"
+            },
+            {
+                nome: "Aposta da Honra",
+                tipo: "Ativa",
+                desc: "Gaste até 30 moedas antes de atacar. Cada 10 moedas garantem +1 de dano (Máx +3). O valor é perdido se errar.",
+                dano: "Até +3",
+                cd: "1 Turno"
+            }
+        ],
+        2: [
+            {
+                nome: "Golpe Baixo Surpresa",
+                tipo: "Ativa",
+                desc: "Ataque sujo. Se o alvo estiver desprevenido, caído ou flanqueado, o dano aumenta em +1d4.",
+                dano: "1d8 (+1d4)",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Cobrador Ameaçador",
+                tipo: "Passiva",
+                desc: "Sua presença é intimidadora. Inimigos adjacentes sofrem -2 em testes de Vontade contra você.",
+                dano: "Debuff Vontade",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Extorsão Violenta",
+                tipo: "Ativa",
+                desc: "Ataque intimidador. No acerto, o alvo fica abalado e causa -2 de dano até o próximo turno dele.",
+                dano: "2d8 + Debuff",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Código da Família",
+                tipo: "Passiva",
+                desc: "Honra entre ladrões: Se você não atacar inimigos caídos ou indefesos, ganha +2 em Defesa física.",
+                dano: "Defesa +2",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Execução Honrada",
+                tipo: "Ativa",
+                desc: "Específico contra alvos fortes (mais de 50% PV). Se o golpe derrubar o alvo, você recupera 5 PV.",
+                dano: "2d10",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Punhos Endurecidos",
+                tipo: "Passiva",
+                desc: "Mestre da briga de rua. Usar armas improvisadas (tacos, correntes, soqueiras) garante +1d6 de dano.",
+                dano: "+1d6",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Suborno Mortal",
+                tipo: "Ativa",
+                desc: "Gaste dinheiro para potencializar o golpe: 20 moedas (+1d6) ou 40 moedas (+1d10).",
+                dano: "+1d6 ou +1d10",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Orgulho Inabalável",
+                tipo: "Passiva",
+                desc: "Ao reduzir um inimigo a 0 PV, você ganha +2 de dano fixo até o fim do seu próximo turno.",
+                dano: "Buff Dano",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Chuva de Golpes",
+                tipo: "Ativa",
+                desc: "Executa dois ataques corpo a corpo rápidos, focando em pontos vitais.",
+                dano: "2x 1d12",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Respeito Forçado",
+                tipo: "Passiva",
+                desc: "Inimigos que falharem em resistir aos seus efeitos sofrem -1 em todas as Defesas contra você.",
+                dano: "Debuff Def",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Contrato de Sangue",
+                tipo: "Ativa",
+                desc: "Marca um alvo para morrer. Causa +4 de dano contra ele, mas sua Defesa cai em -1 contra outros.",
+                dano: "+4 Dano",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Nome Temido",
+                tipo: "Passiva",
+                desc: "Especialista em duelos. Em 1v1, causa +2 de dano e recebe -1 de dano de todas as fontes.",
+                dano: "+2 Atk / -1 Def",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Golpe do Dragão",
+                tipo: "Ativa",
+                desc: "O golpe supremo. Pode gastar até 50 moedas para adicionar +1d12 de dano extra ao ataque.",
+                dano: "3d12 (+1d12)",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Lenda da Família",
+                tipo: "Passiva",
+                desc: "Uma vez por sessão, se cair a 0 PV, permanece com 1 PV e ganha +3 de dano até o fim da luta.",
+                dano: "Last Stand",
+                cd: "1 Sessão"
+            }
+        ]
     },
     "policial": {
-        1: [{ nome: "Algemar", tipo: "Ativa", desc: "Prende alvo (agarrar).", dano: "Imóvel", cd: "1 Combate" }, { nome: "Autoridade", tipo: "Passiva", desc: "+2 Intimidação legal.", dano: "-", cd: "-" }],
-        2: [{ nome: "Taser", tipo: "Ativa", desc: "Dano elétrico e atordoa.", dano: "1d4+Stun", cd: "2 Turnos" }, { nome: "Colete Kevlar", tipo: "Passiva", desc: "RD 2 contra balas.", dano: "-", cd: "-" }],
-        3: [{ nome: "Parceiro", tipo: "Passiva", desc: "+2 Defesa se adjacente a aliado.", dano: "-", cd: "-" }, { nome: "Invasão Tática", tipo: "Ativa", desc: "Surpreende inimigos em sala.", dano: "Iniciativa", cd: "-" }],
-        4: [{ nome: "Escudo Balístico", tipo: "Ativa", desc: "Cobertura móvel.", dano: "+4 Def", cd: "1 Combate" }, { nome: "Investigação", tipo: "Passiva", desc: "+2 Percepção.", dano: "-", cd: "-" }],
-        5: [{ nome: "Spray de Pimenta", tipo: "Ativa", desc: "Cega cone pequeno.", dano: "Cegueira", cd: "1 Combate" }, { nome: "Negociador", tipo: "Ativa", desc: "Pode parar combate p/ falar.", dano: "Social", cd: "1 Sessão" }],
-        6: [{ nome: "Reforços", tipo: "Ativa", desc: "Chama 2 NPCs policiais.", dano: "Summon", cd: "1 Sessão" }, { nome: "Atirador de Elite", tipo: "Passiva", desc: "Ignora cobertura.", dano: "-", cd: "-" }],
-        7: [{ nome: "Ariete", tipo: "Ativa", desc: "Quebra portas/barreiras.", dano: "-", cd: "-" }, { nome: "Corrupto ou Honesto", tipo: "Passiva", desc: "Escolhe bônus: +Ouro ou +Vontade.", dano: "-", cd: "-" }],
-        8: [{ nome: "SWAT", tipo: "Ativa", desc: "Equipamento pesado (Flashbang+Fuzil).", dano: "4d8", cd: "1 Sessão" }, { nome: "A Lei", tipo: "Passiva", desc: "+2 Dano contra criminosos.", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Desarme Rápido",
+                tipo: "Ativa",
+                desc: "Ataque focado na arma do alvo. Se acertar (AGI), o inimigo derruba a arma e não pode pegá-la por 1d4 turnos.",
+                dano: "Desarme",
+                cd: "4 Turnos"
+            },
+            {
+                nome: "Treinamento Policial",
+                tipo: "Passiva",
+                desc: "Ganha +1 em Pontaria, Atletismo e Tática. Recebe +1 adicional se portar Pistola, Taser ou Escudo.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Tiro Duplo",
+                tipo: "Ativa",
+                desc: "Dois disparos rápidos. Se ambos atingirem o alvo, você adiciona um terceiro dado de dano (+1d6) extra.",
+                dano: "2x 1d6 (+1d6)",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Cobertura Urbana",
+                tipo: "Passiva",
+                desc: "Especialista em usar o cenário. Ganha +3 de defesa contra perfuração perto de paredes, carros ou móveis.",
+                dano: "Defesa +3",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Taser ou Espingarda?",
+                tipo: "Ativa",
+                desc: "Escolha: Taser (1d8 + Stun por 1 turno se falhar Fortitude) ou Espingarda (2d8 em alcance curto).",
+                dano: "1d8 / 2d8",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Senso de Patrulha",
+                tipo: "Passiva",
+                desc: "Percepção aguçada para perigo. Detecta inimigos ocultos e ganha +2 em testes de Percepção.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Escudo e Avanço",
+                tipo: "Ativa",
+                desc: "Avança com escudo balístico. Você e um aliado adjacente ignoram 2d6 de dano por 2 turnos.",
+                dano: "Redução 2d6",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Código de Conduta",
+                tipo: "Passiva",
+                desc: "Sua postura autoritária e disciplina garantem um bônus de +2 em todas as perícias de Presença (PRE).",
+                dano: "PRE +2",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Manobra de Contenção",
+                tipo: "Ativa",
+                desc: "Bloqueia uma rota. Inimigos que tentarem passar são empurrados e sofrem dano. Requer Tática (FOR).",
+                dano: "2d10 + Push",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Controle de Zona",
+                tipo: "Passiva",
+                desc: "Ao cobrir pontos de entrada (portas/corredores), você sempre age primeiro contra quem entrar na área.",
+                dano: "Interrupção",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Tiro Certeiro",
+                tipo: "Ativa",
+                desc: "Ignora cobertura leve. Se o ponto fraco do alvo for conhecido, adiciona +1d6 ao dano final.",
+                dano: "2d8 (+1d6)",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Calma Sob Pressão",
+                tipo: "Passiva",
+                desc: "Ao ficar abaixo de 1/4 dos PV, ganha +2 em todos os testes até que seus PV subam para 2/4.",
+                dano: "Buff Desespero",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Desarme Tático",
+                tipo: "Ativa",
+                desc: "Pode ser usada com outra ativa. No acerto, tenta imobilizar (paralisia) o alvo. Alvo testa Fortitude.",
+                dano: "CC / Imobilizar",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Precisão Policial",
+                tipo: "Passiva",
+                desc: "Mestre de armas de fogo. Sempre que causar um crítico, pode realizar um ataque básico extra sem custo.",
+                dano: "Extra Atk",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Neutralizado",
+                tipo: "Ativa",
+                desc: "Ataca até 3 alvos. Se eliminar um, ganha uma nova ação no turno e +1d12 de dano até o fim da luta.",
+                dano: "+1d12 Evolutivo",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Atirador de Elite Urbano",
+                tipo: "Passiva",
+                desc: "Ignora penalidade de distância. Se houver linha de visão, você acerta automaticamente sem rolar dados.",
+                dano: "Acerto Garantido",
+                cd: "-"
+            }
+        ]
     },
     "engenheiro": {
-        1: [{ nome: "Reparar", tipo: "Ativa", desc: "Conserta itens/veículos/drones.", dano: "Cura Mec", cd: "-" }, { nome: "Gambiarra", tipo: "Passiva", desc: "Cria itens com lixo.", dano: "-", cd: "-" }],
-        2: [{ nome: "Drone de Recon", tipo: "Ativa", desc: "Vê área segura.", dano: "Visão", cd: "1 Combate" }, { nome: "Mecânico", tipo: "Passiva", desc: "+2 Pilotagem/Tecnologia.", dano: "-", cd: "-" }],
-        3: [{ nome: "Torreta Sentinela", tipo: "Ativa", desc: "Instala arma que atira sozinha.", dano: "1d6/t", cd: "1 Sessão" }, { nome: "Sabotagem", tipo: "Ativa", desc: "Quebra arma inimiga.", dano: "Disarm", cd: "1 Combate" }],
-        4: [{ nome: "Campo de Força", tipo: "Ativa", desc: "Parede de energia.", dano: "Wall", cd: "1 Combate" }, { nome: "Blindagem", tipo: "Passiva", desc: "Veículos ganham +RD.", dano: "-", cd: "-" }],
-        5: [{ nome: "Drone de Combate", tipo: "Ativa", desc: "Drone que ataca.", dano: "1d8", cd: "1 Combate" }, { nome: "Otimização", tipo: "Passiva", desc: "Armas tec ganham +1 Dano.", dano: "-", cd: "-" }],
-        6: [{ nome: "Exoesqueleto", tipo: "Ativa", desc: "Ganha Força e Defesa temp.", dano: "Buff", cd: "1 Sessão" }, { nome: "Hacker", tipo: "Ativa", desc: "Controla máquinas inimigas.", dano: "Control", cd: "1 Combate" }],
-        7: [{ nome: "Sobrecarga", tipo: "Ativa", desc: "Explode seus gadgets.", dano: "4d6", cd: "-" }, { nome: "Mestre Construtor", tipo: "Passiva", desc: "Torretas têm +PV e +Dano.", dano: "-", cd: "-" }],
-        8: [{ nome: "Robô Gigante", tipo: "Ativa", desc: "Invoca Mecha de Batalha.", dano: "Titan", cd: "1 Sessão" }, { nome: "Tecnocrata", tipo: "Passiva", desc: "Pode ter 2 engenhocas ativas.", dano: "-", cd: "-" }]
-    },
-    "quimico": { // Cientista
-        1: [{ nome: "Mistura Instável", tipo: "Ativa", desc: "Joga frasco aleatório (Fogo/Ácido).", dano: "1d6", cd: "1 Turno" }, { nome: "Antídoto", tipo: "Ativa", desc: "Cura veneno.", dano: "Cura", cd: "-" }],
-        2: [{ nome: "Gás Lacrimogêneo", tipo: "Ativa", desc: "Cega e sufoca área.", dano: "Debuff", cd: "1 Combate" }, { nome: "Resistência Química", tipo: "Passiva", desc: "Imune a ácidos/venenos.", dano: "-", cd: "-" }],
-        3: [{ nome: "Estimulante", tipo: "Ativa", desc: "Aliado ganha Haste (Ação Extra).", dano: "Buff", cd: "1 Combate" }, { nome: "Analista", tipo: "Passiva", desc: "Identifica fraquezas.", dano: "-", cd: "-" }],
-        4: [{ nome: "Ácido Corrosivo", tipo: "Ativa", desc: "Derrete armadura (RD 0).", dano: "Debuff Def", cd: "1 Combate" }, { nome: "Primeiros Socorros", tipo: "Passiva", desc: "Medicina aprimorada.", dano: "+Cura", cd: "-" }],
-        5: [{ nome: "Mutação", tipo: "Ativa", desc: "Ganha garras ou brânquias temp.", dano: "Buff", cd: "1 Sessão" }, { nome: "Explosivos Plásticos", tipo: "Ativa", desc: "Bomba remota.", dano: "3d6", cd: "1 Combate" }],
-        6: [{ nome: "Soro da Verdade", tipo: "Ativa", desc: "Interrogatório infalível.", dano: "Social", cd: "-" }, { nome: "Vírus", tipo: "Ativa", desc: "Doença que espalha entre inimigos.", dano: "DoT Área", cd: "1 Sessão" }],
-        7: [{ nome: "Elixir da Vida", tipo: "Ativa", desc: "Cura total de um alvo.", dano: "Full Heal", cd: "1 Sessão" }, { nome: "Cientista Louco", tipo: "Passiva", desc: "Pode misturar 2 poções.", dano: "-", cd: "-" }],
-        8: [{ nome: "Bomba Atômica (Mini)", tipo: "Ativa", desc: "Dano massivo, área radioativa.", dano: "10d6", cd: "1 Campanha" }, { nome: "Imunidade Universal", tipo: "Passiva", desc: "Imune a doenças/venenos/gases.", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Ferramenta Certa",
+                tipo: "Ativa",
+                desc: "Cria ou modifica um item simples rapidamente. Concede bônus de +1 em Ciências por 2 turnos.",
+                dano: "Utilitário",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Ofício Técnico",
+                tipo: "Passiva",
+                desc: "Capacidade de consertar ou montar equipamentos. Ganha +1 em Atualidades e Direção.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Mina de Proximidade",
+                tipo: "Ativa",
+                desc: "Planta mina invisível (1m). Inimigos que ativarem sofrem dano de fogo e penalidade de movimento.",
+                dano: "1d10 Queim",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Design Estrutural",
+                tipo: "Passiva",
+                desc: "Permite usar Ciências para identificar fraquezas em máquinas ou reforços em estruturas.",
+                dano: "Análise",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Drone de Suporte",
+                tipo: "Ativa",
+                desc: "Libera drone para: Curar 1d8 PV, transportar itens ou bloquear a visão de inimigos.",
+                dano: "1d8 Cura",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Resistência Mecânica",
+                tipo: "Passiva",
+                desc: "Itens improvisados não quebram. Reduz em -1 dano de impacto em você e aliados com sua armadura.",
+                dano: "Resistência",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Armadilha Inteligente",
+                tipo: "Ativa",
+                desc: "Ativação remota. Escolha: Pulso de Choque (1d8 + Desarme) ou Gás Lacrimogêneo (Desvantagem geral).",
+                dano: "CC / Debuff",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Engenheiro de Campo",
+                tipo: "Passiva",
+                desc: "Uma vez por combate, pode reparar estruturas ou criar cobertura instantânea usando sucata.",
+                dano: "Reparo",
+                cd: "1 Combate"
+            }
+        ],
+        5: [
+            {
+                nome: "Campo Elétrico",
+                tipo: "Ativa",
+                desc: "Cria barreira elétrica por 2 turnos. Inimigos que atravessarem sofrem dano de choque imediato.",
+                dano: "2d6 Choque",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Mestre das Ferramentas",
+                tipo: "Passiva",
+                desc: "Objetos improvisados (chaves, brocas) são armas letais para você. Causam +1d6 de dano.",
+                dano: "+1d6",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Torreta Modular",
+                tipo: "Ativa",
+                desc: "Implanta torreta remota. Possui 3 disparos automáticos de alto dano.",
+                dano: "2d8 p/ tiro",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Ajuste Técnico",
+                tipo: "Passiva",
+                desc: "Uma vez por sessão, melhora permanentemente o alcance, defesa ou precisão de um equipamento.",
+                dano: "Upgrade",
+                cd: "1 Sessão"
+            }
+        ],
+        7: [
+            {
+                nome: "Explosivo Personalizado",
+                tipo: "Ativa",
+                desc: "Lança bomba única. Escolha: Queimadura (3d10), Congelar (Paralisia) ou EMP (Anula tecnologia).",
+                dano: "3d10 / CC",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Olho de Engenheiro",
+                tipo: "Passiva",
+                desc: "Sabota máquinas e detecta fraquezas automaticamente. Pode anular armadilhas tecnológicas sem testes.",
+                dano: "Sabotagem",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Mecha de Campo",
+                tipo: "Ativa",
+                desc: "Monta exoesqueleto (3 rodadas): +2 Defesa, +1d12 em ataques e braço mecânico com alcance de 3m.",
+                dano: "+1d12",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Arquiteto da Sobrevivência",
+                tipo: "Passiva",
+                desc: "Você e aliados a 3m ganham imunidade a surpresa e +1 contra armadilhas e desastres mecânicos.",
+                dano: "Proteção",
+                cd: "-"
+            }
+        ]
     },
     "criminoso": {
-        1: [{ nome: "Mãos Leves", tipo: "Passiva", desc: "Rouba sem ser notado.", dano: "-", cd: "-" }, { nome: "Golpe Baixo", tipo: "Ativa", desc: "Dano extra em homens.", dano: "1d6+Stun", cd: "1 Combate" }],
-        2: [{ nome: "Arrombar", tipo: "Passiva", desc: "Abre portas/cofres.", dano: "-", cd: "-" }, { nome: "Faca nas Costas", tipo: "Ativa", desc: "Crítico automático se oculto.", dano: "Crit", cd: "1 Combate" }],
-        3: [{ nome: "Contatos do Crime", tipo: "Passiva", desc: "Compra armas ilegais.", dano: "-", cd: "-" }, { nome: "Ameaçar", tipo: "Ativa", desc: "Usa força para social.", dano: "Intimidar", cd: "-" }],
-        4: [{ nome: "Fuga", tipo: "Ativa", desc: "Desengaja e corre dobro.", dano: "Fuga", cd: "1 Turno" }, { nome: "Rua", tipo: "Passiva", desc: "+2 Iniciativa e Percepção urbano.", dano: "-", cd: "-" }],
-        5: [{ nome: "Sequestro", tipo: "Ativa", desc: "Agarra e move inimigo.", dano: "Grapple", cd: "-" }, { nome: "Emboscada", tipo: "Passiva", desc: "+1 Turno surpresa.", dano: "-", cd: "-" }],
-        6: [{ nome: "Sabotagem Veicular", tipo: "Ativa", desc: "Corta freios/estraga motor.", dano: "-", cd: "-" }, { nome: "Implacável", tipo: "Passiva", desc: "Não morre com 0 PV (fica com 1).", dano: "1x/Dia", cd: "-" }],
-        7: [{ nome: "Rebelião", tipo: "Ativa", desc: "Incita NPCs a lutar.", dano: "Chaos", cd: "1 Sessão" }, { nome: "Mestre do Disfarce", tipo: "Ativa", desc: "Muda aparência.", dano: "-", cd: "-" }],
-        8: [{ nome: "Chefe do Crime", tipo: "Passiva", desc: "Ganha renda passiva.", dano: "$$$", cd: "-" }, { nome: "O Crime Compensa", tipo: "Ativa", desc: "Gasta dinheiro p/ dano.", dano: "Pay2Win", cd: "-" }]
+        1: [
+            {
+                nome: "Arrombador",
+                tipo: "Passiva",
+                desc: "Abre fechaduras simples sem ferramentas. +2 em Furtividade/Sobrevivência urbana e desativa armadilhas mecânicas com ação rápida.",
+                dano: "Utilitário",
+                cd: "-"
+            },
+            {
+                nome: "Degrau Oculto",
+                tipo: "Ativa",
+                desc: "Move-se 6m sem provocar ataques de oportunidade. Se sair da linha de visão, fica furtivo até o próximo turno.",
+                dano: "Mobilidade",
+                cd: "2 Turnos"
+            }
+        ],
+        2: [
+            {
+                nome: "Golpe Sorrateiro",
+                tipo: "Ativa",
+                desc: "Se estiver furtivo ou o inimigo estiver distraído/flanqueado, adiciona +2d6 de dano ao ataque corpo a corpo.",
+                dano: "+2d6",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Mãos Leves",
+                tipo: "Passiva",
+                desc: "Pode furtar, disfarçar ou trocar objetos com ação bônus. Recebe +2 em Furtividade e Arremesso.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Sombra Urbana",
+                tipo: "Passiva",
+                desc: "Em cidades: +2 em Reflexo e ignora terreno difícil. Pode se esconder mesmo com cobertura parcial.",
+                dano: "Buff Urbano",
+                cd: "-"
+            },
+            {
+                nome: "Fuga Improvisada",
+                tipo: "Ativa",
+                desc: "Escapa de combate mesmo cercado sem sofrer ataques. Ganha +2 em Furtividade até o fim da cena.",
+                dano: "Fuga",
+                cd: "1 Combate"
+            }
+        ],
+        4: [
+            {
+                nome: "Trapaça Rápida",
+                tipo: "Ativa",
+                desc: "Distração rápida (areia/faca). Alvo testa Reflexo: se falhar, fica cego e perde -1 de Defesa por 1 turno.",
+                dano: "Debuff CC",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Ponto Cego",
+                tipo: "Passiva",
+                desc: "Sempre que atacar um inimigo que não te vê ou que esteja de costas, seu dano ignora defesas (Dano Verdadeiro).",
+                dano: "Verdadeiro",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Explosivo Improvisado",
+                tipo: "Ativa",
+                desc: "Lança bomba caseira (6m). Causa dano de impacto em até 3 alvos simultaneamente.",
+                dano: "3d6 Área",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Provocador",
+                tipo: "Ativa",
+                desc: "Usa Persuasão (PRE) para atrair o foco. Se o inimigo te ignorar, seu próximo ataque contra ele ganha +1d8.",
+                dano: "+1d8",
+                cd: "1 Combate"
+            }
+        ],
+        6: [
+            {
+                nome: "Reflexo Criminoso",
+                tipo: "Passiva",
+                desc: "Pode gastar 1 PE para ganhar vantagem em Reflexo na rodada. Se esquivar, contra-ataca com +1d10.",
+                dano: "+1d10 C-Atk",
+                cd: "-"
+            },
+            {
+                nome: "Sorriso Distraído",
+                tipo: "Ativa",
+                desc: "Inimigo falha automaticamente em Percepção contra você. Em combate, aplica -2 no acerto do alvo por 1 turno.",
+                dano: "Debuff Atk",
+                cd: "1 Rodada"
+            }
+        ],
+        7: [
+            {
+                nome: "Morte Silenciosa",
+                tipo: "Ativa",
+                desc: "Ataque furtivo potente. Se o alvo morrer, inimigos próximos testam Vontade ou ficam confusos.",
+                dano: "4d6 + CC",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Investida Oculta",
+                tipo: "Passiva",
+                desc: "Ao sair de furtividade, o primeiro ataque causa +2d6 e o inimigo tem desvantagem no Reflexo.",
+                dano: "+2d6",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Desaparecer",
+                tipo: "Ativa",
+                desc: "Invisível por 2 turnos. Atravessa inimigos livremente. Ao reaparecer, ataca com vantagem e dano extra.",
+                dano: "+2d8",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Golpe Crítico Fatal",
+                tipo: "Passiva",
+                desc: "Críticos furtivos corpo a corpo dobram o dano final e aplicam sangramento (1d6 por 3 turnos).",
+                dano: "Dobro + Dot",
+                cd: "-"
+            }
+        ]
     },
-    "investigador": {
-        1: [{ nome: "Dedução", tipo: "Passiva", desc: "Descobre pistas invisíveis.", dano: "-", cd: "-" }, { nome: "Interrogar", tipo: "Ativa", desc: "Detecta mentiras.", dano: "Social", cd: "-" }],
-        2: [{ nome: "Ponto Fraco", tipo: "Ativa", desc: "Analisa inimigo. Próximo atk ignora RD.", dano: "Pierce", cd: "1 Turno" }, { nome: "Memória Eidética", tipo: "Passiva", desc: "Lembra de tudo.", dano: "-", cd: "-" }],
-        3: [{ nome: "Antecipação", tipo: "Ativa", desc: "+4 Defesa contra 1 ataque.", dano: "Esquiva", cd: "1 Rodada" }, { nome: "Lógica Fria", tipo: "Passiva", desc: "Imune a ilusões.", dano: "-", cd: "-" }],
-        4: [{ nome: "Desarmar Armadilha", tipo: "Ativa", desc: "Desativa perigos.", dano: "-", cd: "-" }, { nome: "Tiro Tático", tipo: "Ativa", desc: "Remove buff do inimigo.", dano: "Dispel", cd: "1 Combate" }],
-        5: [{ nome: "Perfil Criminal", tipo: "Passiva", desc: "Sabe como inimigo age.", dano: "+Iniciativa", cd: "-" }, { nome: "Revelação", tipo: "Ativa", desc: "Expõe inimigos ocultos.", dano: "Visão", cd: "-" }],
-        6: [{ nome: "Plano B", tipo: "Ativa", desc: "Re-rola uma ação falha.", dano: "Reroll", cd: "1 Sessão" }, { nome: "Mente Blindada", tipo: "Passiva", desc: "RD 5 mental.", dano: "-", cd: "-" }],
-        7: [{ nome: "Xeque-Mate", tipo: "Ativa", desc: "Se acertar, inimigo não age 1 turno.", dano: "Stun", cd: "1 Combate" }, { nome: "Sabe-Tudo", tipo: "Passiva", desc: "+2 Todas Perícias.", dano: "-", cd: "-" }],
-        8: [{ nome: "A Verdade", tipo: "Ativa", desc: "Descobre o segredo do plot/boss.", dano: "Narrativo", cd: "1 Sessão" }, { nome: "Sherlock", tipo: "Passiva", desc: "Critica com 15-20 se analisou.", dano: "-", cd: "-" }]
-    },
-    "artista": {
-        1: [{ nome: "Inspiração Bárdica", tipo: "Ativa", desc: "Dado extra (1d6) para aliado.", dano: "Buff", cd: "2 Turnos" }, { nome: "Charme", tipo: "Passiva", desc: "+2 Social.", dano: "-", cd: "-" }],
-        2: [{ nome: "Canção de Ninar", tipo: "Ativa", desc: "Põe inimigos pra dormir.", dano: "Sleep", cd: "1 Combate" }, { nome: "Distração", tipo: "Ativa", desc: "Inimigos olham pra você.", dano: "Taunt", cd: "1 Turno" }],
-        3: [{ nome: "Grito Sônico", tipo: "Ativa", desc: "Dano e atordoa em cone.", dano: "2d6", cd: "1 Combate" }, { nome: "Famoso", tipo: "Passiva", desc: "Reconhecido em lugares.", dano: "-", cd: "-" }],
-        4: [{ nome: "Performance", tipo: "Ativa", desc: "Ganha dinheiro/info com arte.", dano: "-", cd: "-" }, { nome: "Canção de Guerra", tipo: "Ativa", desc: "Aliados +1 Atk/Dano.", dano: "Buff Área", cd: "1 Combate" }],
-        5: [{ nome: "Mímica", tipo: "Ativa", desc: "Copia ação de outro.", dano: "Copy", cd: "1 Sessão" }, { nome: "Musa", tipo: "Passiva", desc: "Aliados recuperam PE perto de você.", dano: "Regen MP", cd: "-" }],
-        6: [{ nome: "Dança das Lâminas", tipo: "Ativa", desc: "Ataca enquanto move.", dano: "1d8", cd: "1 Turno" }, { nome: "Ilusão Maior", tipo: "Ativa", desc: "Cria cenário falso.", dano: "-", cd: "1 Sessão" }],
-        7: [{ nome: "Ode à Vida", tipo: "Ativa", desc: "Cura em área massiva.", dano: "4d8", cd: "1 Sessão" }, { nome: "Sátira Mordaz", tipo: "Ativa", desc: "Inimigo sofre dano psíquico.", dano: "3d6", cd: "1 Turno" }],
-        8: [{ nome: "Showstopper", tipo: "Ativa", desc: "Para o tempo/combate por 1 turno.", dano: "Time Stop", cd: "1 Sessão" }, { nome: "Lenda do Rock", tipo: "Passiva", desc: "Sua música altera a realidade.", dano: "God", cd: "-" }]
-    },
-    "padre": {
-        1: [{ nome: "Benção", tipo: "Ativa", desc: "+1d4 em testes por 1 min.", dano: "Buff", cd: "1 Combate" }, { nome: "Água Benta", tipo: "Ativa", desc: "Dano em demônios/mortos.", dano: "1d8", cd: "1 Turno" }],
-        2: [{ nome: "Cura pelas Mãos", tipo: "Ativa", desc: "Cura toque.", dano: "1d10", cd: "1 Turno" }, { nome: "Proteção Divina", tipo: "Passiva", desc: "+1 Def contra Mal.", dano: "-", cd: "-" }],
-        3: [{ nome: "Exorcismo", tipo: "Ativa", desc: "Expulsa possessões/espíritos.", dano: "Banish", cd: "1 Combate" }, { nome: "Fé", tipo: "Passiva", desc: "Imune medo/terror.", dano: "-", cd: "-" }],
-        4: [{ nome: "Círculo Sagrado", tipo: "Ativa", desc: "Inimigos não entram.", dano: "Barreira", cd: "1 Combate" }, { nome: "Luz", tipo: "Ativa", desc: "Ilumina e cega trevas.", dano: "Flash", cd: "-" }],
-        5: [{ nome: "Martelo Divino", tipo: "Ativa", desc: "Arma espiritual ataca.", dano: "2d8", cd: "1 Combate" }, { nome: "Mártir", tipo: "Passiva", desc: "Absorve dano de aliados.", dano: "Sacrifício", cd: "-" }],
-        6: [{ nome: "Oração em Massa", tipo: "Ativa", desc: "Cura todos em 2d8.", dano: "Cura Área", cd: "1 Sessão" }, { nome: "Voto de Silêncio", tipo: "Passiva", desc: "Se não falar, +2 Vontade.", dano: "-", cd: "-" }],
-        7: [{ nome: "Ressurreição", tipo: "Ativa", desc: "Traz de volta à vida.", dano: "Reviver", cd: "1 Sessão" }, { nome: "Aura Santa", tipo: "Passiva", desc: "Dano radiante em volta.", dano: "1d6/t", cd: "-" }],
-        8: [{ nome: "Intervenção Divina", tipo: "Ativa", desc: "Pede milagre ao Deus.", dano: "Deus Ex", cd: "1 Campanha" }, { nome: "Santo", tipo: "Passiva", desc: "Não envelhece/não adoece.", dano: "-", cd: "-" }]
+    "quimico": {
+        1: [
+            {
+                nome: "Kit de Emergência",
+                tipo: "Ativa",
+                desc: "Cura ferimentos ou remove condições negativas (sangramento/veneno). Não pode ser usado em si mesmo.",
+                dano: "1d8 Cura",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Conhecimento de Substâncias",
+                tipo: "Passiva",
+                desc: "Identifica venenos e elementos químicos instantaneamente. Ganha +1 em Ciências e Sobrevivência.",
+                dano: "-",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Coquetel Químico",
+                tipo: "Ativa",
+                desc: "Arremessa frasco: Ácido (1d10 + Debuff Def), Clorofórmio (Stun 1 turno) ou Fumaça (Cobertura).",
+                dano: "1d10 / CC",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Estudo de Sintomas",
+                tipo: "Passiva",
+                desc: "Analisa o alvo (Ciências). Se passar, descobre uma fraqueza e adiciona +1d4 ao próximo ataque.",
+                dano: "+1d4",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Soro do Caos",
+                tipo: "Ativa",
+                desc: "Injeção instável (1d4): 1=Cura 2d8; 2=+2d8 Dano; 3=Stun 1 turno; 4=Confusão por 2 turnos.",
+                dano: "Variável",
+                cd: "3 Turnos"
+            },
+            {
+                nome: "Imunidade Gradual",
+                tipo: "Passiva",
+                desc: "Totalmente imune a venenos. Pode criar antídotos e recebe +1 em testes de Medicina.",
+                dano: "Imunidade",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Bomba Tóxica",
+                tipo: "Ativa",
+                desc: "Névoa corrosiva (2m). Causa dano e inimigos que falharem em Fortitude sofrem -2 em todos os testes.",
+                dano: "2d6 + Debuff",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Farmacologia de Campo",
+                tipo: "Passiva",
+                desc: "Sua técnica médica é superior. Ao usar um Kit Médico, você cura +1d6 PV adicionais.",
+                dano: "+1d6 Cura",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Reação em Cadeia",
+                tipo: "Ativa",
+                desc: "Lança dois reagentes. Se ambos atingirem o mesmo alvo, ocorre uma explosão extra de +1d6.",
+                dano: "2x 1d10 (+1d6)",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Manuseio Seguro",
+                tipo: "Passiva",
+                desc: "Especialista em segurança laboratorial. Você nunca sofre dano de seus próprios químicos ou explosivos.",
+                dano: "Proteção",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Catalisador Letal",
+                tipo: "Ativa",
+                desc: "Mistura ácida que derrete proteções. Causa dano e ignora resistências físicas (Impacto/Corte).",
+                dano: "2d10 Puro",
+                cd: "4 Rodadas"
+            },
+            {
+                nome: "Técnico de Laboratório",
+                tipo: "Passiva",
+                desc: "Capacidade de sintetizar rapidamente. Pode duplicar o efeito de qualquer reagente analisado por 1 turno.",
+                dano: "Duplicar",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Elixir de Aceleração",
+                tipo: "Ativa",
+                desc: "Injeta estimulante em si ou aliado: concede +1 ação extra e +1 em Reflexo até o fim da luta.",
+                dano: "Ação Extra",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Dose Letal",
+                tipo: "Passiva",
+                desc: "Suas toxinas são refinadas. Toda vez que aplicar veneno ou ácido, adiciona +2d4 de dano.",
+                dano: "+2d4",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Fórmula Suprema",
+                tipo: "Ativa",
+                desc: "Composto químico massivo em área. Você escolhe se o efeito será cura total ou dano explosivo.",
+                dano: "4d8 Cura/Dano",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Reação Instintiva",
+                tipo: "Passiva",
+                desc: "Ao sofrer dano (1x p/ combate), escolha: Reduzir dano em 2d10, +1d8 de dano químico ou Regenerar 1d10 PV.",
+                dano: "Defesa/Cura",
+                cd: "1 Combate"
+            }
+        ]
     },
     "cultista": {
-        1: [{ nome: "Pacto de Sangue", tipo: "Ativa", desc: "Gasta PV p/ +Dano.", dano: "+1d6", cd: "-" }, { nome: "Sussurros", tipo: "Passiva", desc: "Ouve coisas ocultas.", dano: "-", cd: "-" }],
-        2: [{ nome: "Dreno de Vida", tipo: "Ativa", desc: "Rouba PV do inimigo.", dano: "1d6 Vamp", cd: "1 Turno" }, { nome: "Marca Maldita", tipo: "Ativa", desc: "-2 Def no alvo.", dano: "Debuff", cd: "1 Combate" }],
-        3: [{ nome: "Tentáculos", tipo: "Ativa", desc: "Prende e esmaga.", dano: "2d6+Grapple", cd: "1 Combate" }, { nome: "Insanidade", tipo: "Passiva", desc: "Vontade instável (+/-).", dano: "-", cd: "-" }],
-        4: [{ nome: "Sacrifício", tipo: "Ativa", desc: "Mata aliado/NPC p/ buff full.", dano: "Buff Max", cd: "1 Sessão" }, { nome: "Necromancia", tipo: "Ativa", desc: "Levanta 1 zumbi.", dano: "Summon", cd: "1 Sessão" }],
-        5: [{ nome: "Mente Colmeia", tipo: "Passiva", desc: "Compartilha dor com inimigos.", dano: "Refletir", cd: "-" }, { nome: "Olhar do Abismo", tipo: "Ativa", desc: "Stun e Dano mental.", dano: "3d6", cd: "1 Combate" }],
-        6: [{ nome: "Forma Demoníaca", tipo: "Ativa", desc: "Vira demônio (Voa, +For).", dano: "Transf.", cd: "1 Sessão" }, { nome: "Portal", tipo: "Ativa", desc: "Teleporte longo.", dano: "-", cd: "1 Sessão" }],
-        7: [{ nome: "Palavra de Morte", tipo: "Ativa", desc: "Dano massivo se falhar Vontade.", dano: "5d10", cd: "1 Sessão" }, { nome: "Imortalidade", tipo: "Passiva", desc: "Se morrer, volta no altar.", dano: "-", cd: "-" }],
-        8: [{ nome: "Fim dos Tempos", tipo: "Ativa", desc: "Invoca Deus Antigo (Game Over?).", dano: "Apocalipse", cd: "1 Campanha" }, { nome: "Escolhido", tipo: "Passiva", desc: "NPCs cultistas obedecem.", dano: "-", cd: "-" }]
+        1: [
+            {
+                nome: "Marca Profana",
+                tipo: "Passiva",
+                desc: "Habilidades de Cultista marcam o alvo. Alvos marcados sofrem +1 de dano adicional por cada ataque recebido de você.",
+                dano: "+1 por hit",
+                cd: "-"
+            },
+            {
+                nome: "Corte Ritualístico",
+                tipo: "Ativa",
+                desc: "Escolha: Sangue (Gasta 2 PV p/ 1d8 Ocultismo) ou Imaturo (Gasta 1 Defesa Física p/ bônus de +1d4 em alvos marcados).",
+                dano: "1d8 / +1d4",
+                cd: "1 Rodada"
+            }
+        ],
+        2: [
+            {
+                nome: "Êxtase Doloroso",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 4 PV p/ 1d10+1d6. Imaturo: Gasta 2 defesas; se matar o alvo, pode usar outra habilidade imediatamente.",
+                dano: "1d10+1d6 / Reset",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Corpo Profanado",
+                tipo: "Passiva",
+                desc: "Sua aura corrói resistências. Você ignora 1 ponto de resistência de qualquer inimigo marcado.",
+                dano: "Penetração",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Invocação Impura",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 6 PV p/ 2d8 Ritual. Imaturo: Gasta 3 defesas; se o alvo morrer, a Marca Profana espalha para vizinhos.",
+                dano: "2d8 / Propagar",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Devoção ao Abismo",
+                tipo: "Passiva",
+                desc: "Ganha +1 em dano (acumulativo até +20) para cada vez que gastar PV ou Defesas em habilidades neste combate.",
+                dano: "Ate +20",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Explosão Sacrificial",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 8 PV. Imaturo: Gasta 4 defesas. Gera explosão em área pequena. Versão Imatura não afeta aliados.",
+                dano: "3d6 Área",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Mente Fanática",
+                tipo: "Passiva",
+                desc: "Pode usar habilidades abaixo de 5 PV ou com defesas negativas. Abaixo de 5 PV, o custo de vida é suspenso até curar-se.",
+                dano: "Sustento",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Sangria Profunda",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 10 PV p/ 2d12. Imaturo: Gasta 5 defesas; se alvo marcado, aplica sangramento (1d6) por 2 turnos.",
+                dano: "2d12 / 1d6 DoT",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Fé Distorcida",
+                tipo: "Passiva",
+                desc: "Sempre que critar, recupera: 2 PV (Sangue) ou 1 ponto de defesa gasta (Imaturo).",
+                dano: "Sustain",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Ritual da Ruína",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 12 PV p/ 3d10 Ocultismo. Imaturo: Gasta 6 defesas p/ 3d10 Ritual.",
+                dano: "3d10",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Corpo como Oferta",
+                tipo: "Ativa",
+                desc: "Sacrifício Final: Consome todo seu PV restante para gerar uma explosão com dano igual ao valor de vida sacrificado.",
+                dano: "Dano = PV",
+                cd: "1 Combate"
+            }
+        ],
+        7: [
+            {
+                nome: "Avatar Profano",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 15 PV (Ação Livre), todas as skills ganham +1d10. Imaturo: Gasta 8 def p/ +2 Atk permanente (Max +6).",
+                dano: "+1d10 / +Atk",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Fanatismo Absoluto",
+                tipo: "Passiva",
+                desc: "Enquanto estiver ferido (abaixo de 1/2 PV) ou com 3+ defesas reduzidas, causa +3 de dano fixo em tudo.",
+                dano: "+3 Fixo",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Apoteose do Sacrifício",
+                tipo: "Ativa",
+                desc: "Sangue: Gasta 20 PV p/ 4d12 em área. Imaturo: Gasta TODAS as defesas p/ ganhar Dano Verdadeiro até o fim do combate.",
+                dano: "4d12 / Verdadeiro",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Retorno da Carne Profana",
+                tipo: "Passiva",
+                desc: "Ao fim do combate, todo PV gasto em habilidades é convertido em ES (Escudo) que dura até a próxima luta.",
+                dano: "Shield",
+                cd: "-"
+            }
+        ]
+    },
+    "investigador": {
+        1: [
+            {
+                nome: "Olhos Afiados",
+                tipo: "Passiva",
+                desc: "Detecta pistas e armadilhas passivamente. Ganha +2 em Percepção e Sobrevivência em ambientes urbanos.",
+                dano: "Utilitário",
+                cd: "-"
+            },
+            {
+                nome: "Interrogador",
+                tipo: "Ativa",
+                desc: "Força informações via Vontade. Em combate, reduz a defesa mental (Ocultismo/Ritual) do alvo em -2 por 2 turnos.",
+                dano: "Debuff Def",
+                cd: "1 Rodada"
+            }
+        ],
+        2: [
+            {
+                nome: "Tiro no Tendão",
+                tipo: "Ativa",
+                desc: "Ataque de precisão (Fogo/Arremesso). Causa dano e reduz o deslocamento do alvo pela metade por 2 turnos.",
+                dano: "2d8 + Slow",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Instinto de Perseguição",
+                tipo: "Passiva",
+                desc: "Ganha +2 em rastreio. Contra um alvo específico caçado, recebe +2 em testes de ataque e dano.",
+                dano: "+2 Dano/Atk",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Marcar Alvo",
+                tipo: "Ativa",
+                desc: "Escolha um inimigo: Aliados ganham +1 em Pontaria contra ele. Você causa +1d8 de dano extra no alvo marcado.",
+                dano: "+1d8 Extra",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Técnica Policial",
+                tipo: "Passiva",
+                desc: "Pode usar Tática/Arremesso para Intimidar/Esquivar. Permite sacar e arremessar uma arma como ação bônus.",
+                dano: "Versatilidade",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Raciocínio Frio",
+                tipo: "Ativa",
+                desc: "Prevê movimentos: anula o próximo ataque corporal contra você ou ganha +4 e Vantagem contra ataques à distância.",
+                dano: "Evasão",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Contra-Ataque Letal",
+                tipo: "Passiva",
+                desc: "Ao esquivar, revida com +1d12 de dano. Se tirar 20 natural, o contra-ataque ignora defesa e ganha +2 de dano.",
+                dano: "1d12 Contra",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Investigação de Campo",
+                tipo: "Ativa",
+                desc: "Análise tática do local. Todo o grupo recebe +2 em Percepção e Reflexo até o fim da cena.",
+                dano: "Buff Grupo",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Tática Precisa",
+                tipo: "Passiva",
+                desc: "Ao agir após um aliado no mesmo alvo, causa +1d6 de dano (acumula pelo número de aliados que já bateram).",
+                dano: "+Xd6 Combo",
+                cd: "-"
+            }
+        ],
+        6: [
+            {
+                nome: "Choque Moral",
+                tipo: "Ativa",
+                desc: "Expõe o alvo: Teste de Vontade ou fica paralisado. Falha Crítica deixa o alvo Indefeso (Defesa 0).",
+                dano: "CC / Stun",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Acusação Direta",
+                tipo: "Passiva",
+                desc: "Ao revelar mentiras ou armadilhas, ganha +2 de defesa e +1d4 de dano no próximo turno.",
+                dano: "+1d4 Buff",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Pistoleiro Tático",
+                tipo: "Ativa",
+                desc: "Dois disparos de 2d8. Se ambos atingirem o mesmo alvo, ele sofre -2 de Defesa por 2 turnos.",
+                dano: "2x 2d8",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Prisão Cidadã",
+                tipo: "Passiva",
+                desc: "Reação: Se um inimigo tentar fugir, você dispara ou golpeia causando dano e impedindo o movimento dele.",
+                dano: "2d6 + Trava",
+                cd: "-"
+            }
+        ],
+        8: [
+            {
+                nome: "Execução Fria",
+                tipo: "Ativa",
+                desc: "Tiro perfeito que ignora defesa. Se o alvo estiver marcado, dobra o dado e aplica sangramento pesado.",
+                dano: "4d10 Puro",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Nada Escapa",
+                tipo: "Passiva",
+                desc: "Imune a surpresas. Vê através de disfarces e pode usar Percepção para esquivar (1x por rodada).",
+                dano: "Evasão Max",
+                cd: "-"
+            }
+        ]
+    },
+    "artista": {
+        1: [
+            {
+                nome: "Cena Inspiradora",
+                tipo: "Ativa",
+                desc: "Performance curta. Até 2 aliados recebem +2 em uma perícia ou defesa à escolha até o próximo ataque deles.",
+                dano: "Buff +2",
+                cd: "2 Rodadas"
+            },
+            {
+                nome: "Ritmo do Caos",
+                tipo: "Passiva",
+                desc: "No início do combate, role 1d6. Se cair 6, você ganha +1d8 de ataque e um aliado ganha +1d6 extra.",
+                dano: "Sorte Inicial",
+                cd: "-"
+            }
+        ],
+        2: [
+            {
+                nome: "Improviso Genial",
+                tipo: "Ativa",
+                desc: "Altera o ambiente. Aliados ignoram penalidades de terreno, visão, confusão e medo até o fim da luta.",
+                dano: "Utilitário",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Refrão Revigorante",
+                tipo: "Passiva",
+                desc: "1x por sessão, quando um aliado cai a 0 PV, ele se levanta com 1d4 PV após sua performance.",
+                dano: "Ressurreição",
+                cd: "1 Sessão"
+            }
+        ],
+        3: [
+            {
+                nome: "Aplauso Frenético",
+                tipo: "Ativa",
+                desc: "Gesto impactante que concede +1d8 de dano para todos os aliados em até 5m por 2 turnos.",
+                dano: "Buff Dano",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Coração Cênico",
+                tipo: "Passiva",
+                desc: "Imune a medo, dúvida e confusão enquanto performa. Dá +2 de Vontade a um aliado adjacente.",
+                dano: "Imunidade",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Rima Ofensiva",
+                tipo: "Ativa",
+                desc: "Insultos rítmicos. O alvo deve passar em Vontade ou sofre -2 em acerto e dano no próximo ataque.",
+                dano: "Debuff -2",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Performance Desviada",
+                tipo: "Passiva",
+                desc: "Ganha +2 em Artes no combate. Pode usar a perícia Artes no lugar de Reflexo para esquivar.",
+                dano: "Evasão (Artes)",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Arte Queima-Alma",
+                tipo: "Ativa",
+                desc: "Explosão emocional em até 2 inimigos. Causa dano de ocultismo e reduz o dano deles se falharem em Vontade.",
+                dano: "2d12 Oculto",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Interlúdio Protetor",
+                tipo: "Passiva",
+                desc: "Pode interromper um ataque inimigo e redirecionar metade do dano para si, reduzindo-o em 2d8.",
+                dano: "Absorção",
+                cd: "1 Combate"
+            }
+        ],
+        6: [
+            {
+                nome: "Arte Total",
+                tipo: "Ativa",
+                desc: "Gasta 1 turno: cura 1d20 PV de todos os aliados, +2 em perícias e +1d6 de dano no próximo ataque deles.",
+                dano: "1d20 Cura",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Inspiração Selvagem",
+                tipo: "Passiva",
+                desc: "Abaixo de 1/2 PV, a maior perícia dos aliados adjacentes torna-se igual ao seu valor de Reflexo.",
+                dano: "Buff Perícia",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Desabafo Mortal",
+                tipo: "Ativa",
+                desc: "Performance devastadora em um alvo. Causa 3d10 e, se o alvo falhar em Vontade, perde a próxima ação.",
+                dano: "3d10 + Stun",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Grito Libertador",
+                tipo: "Passiva",
+                desc: "Remove instantaneamente condições negativas (medo, paralisia, etc) de todos os aliados próximos.",
+                dano: "Purificar",
+                cd: "1 Combate"
+            }
+        ],
+        8: [
+            {
+                nome: "Efeito de Palco",
+                tipo: "Ativa",
+                desc: "Por 2 turnos: aliados em 5m ganham +4 Atk, +2 Def e imunidade mental. Você só pode se mover.",
+                dano: "Super Buff",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Obra-Prima Final",
+                tipo: "Passiva",
+                desc: "Ao cair a 0 PV, levanta com 1 PV e ativa uma cura ou bônus de dano de 1d12 para todo o grupo.",
+                dano: "1d12 Cura/Atk",
+                cd: "1 Sessão"
+            }
+        ]
+    },
+    "padre": {
+        1: [
+            {
+                nome: "Fé Inabalável",
+                tipo: "Passiva",
+                desc: "Totalmente imune a medo e possessão. Ganha +3 em qualquer teste de Vontade que realizar.",
+                dano: "Imunidade",
+                cd: "-"
+            },
+            {
+                nome: "Palavra Curativa",
+                tipo: "Ativa",
+                desc: "Cura 1d8 PV de um aliado. Se o alvo estiver inconsciente (0 PV), ele recupera +2 PV adicionais.",
+                dano: "1d8 Cura",
+                cd: "3 Rodadas"
+            }
+        ],
+        2: [
+            {
+                nome: "Salmo da Resistência",
+                tipo: "Ativa",
+                desc: "Escolha 2 aliados: ganham +2 defesa contra Ocultismo por 2 rodadas e remove maldição, medo ou confusão.",
+                dano: "Purificar",
+                cd: "4 Rodadas"
+            },
+            {
+                nome: "Luz Purificadora",
+                tipo: "Passiva",
+                desc: "Seus ataques são sagrados. Causa +1d8 de dano extra contra mortos-vivos, demônios ou possessos.",
+                dano: "+1d8 Sagrado",
+                cd: "-"
+            }
+        ],
+        3: [
+            {
+                nome: "Escudo da Fé",
+                tipo: "Ativa",
+                desc: "Apenas em aliados não humanos: Barreira de luz que reduz qualquer dano sofrido em 2d6 por 3 ataques recebidos.",
+                dano: "Redução 2d6",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Julgamento Sagrado",
+                tipo: "Passiva",
+                desc: "Ao causar dano sagrado, inimigos não humanos devem passar em Vontade ou sofrem -2 no próximo ataque.",
+                dano: "Debuff Atk",
+                cd: "-"
+            }
+        ],
+        4: [
+            {
+                nome: "Água Benta",
+                tipo: "Ativa",
+                desc: "Arremessável em área (2m). Causa 3d6 de dano sagrado. Mortos-vivos sofrem +1d6 adicional.",
+                dano: "3d6 Área",
+                cd: "2 Turnos"
+            },
+            {
+                nome: "Olhar do Exorcista",
+                tipo: "Passiva",
+                desc: "Detecta entidades sobrenaturais e ocultistas no campo de visão. Causa +1d4 de dano contra eles.",
+                dano: "+1d4",
+                cd: "-"
+            }
+        ],
+        5: [
+            {
+                nome: "Benção Maior",
+                tipo: "Ativa",
+                desc: "Até 3 aliados: recebem +2 em todas as perícias e +1d6 de cura. O efeito dura até o fim da luta.",
+                dano: "Buff Geral",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Exorcismo Instantâneo",
+                tipo: "Passiva",
+                desc: "1x por combate: ao atingir um sobrenatural, ele deve passar em Vontade ou perde a ação e sofre +1d8.",
+                dano: "+1d8 + CC",
+                cd: "1 Combate"
+            }
+        ],
+        6: [
+            {
+                nome: "Reza de Emergência",
+                tipo: "Ativa",
+                desc: "Faz um aliado passar automaticamente em um teste de Fortitude para estabilizar e recupera 1d4 PV.",
+                dano: "Estabilizar",
+                cd: "1 Rodada"
+            },
+            {
+                nome: "Chama da Fé",
+                tipo: "Passiva",
+                desc: "Ao curar um aliado, ele ganha +1d6 no próximo ataque e você recupera 1d4 PV. Não acumulativo.",
+                dano: "Buff/Cura",
+                cd: "-"
+            }
+        ],
+        7: [
+            {
+                nome: "Golpe da Justiça",
+                tipo: "Ativa",
+                desc: "Um golpe carregado de energia divina. Causa dano massivo de ritual/sagrado em um inimigo impuro.",
+                dano: "3d10 Sagrado",
+                cd: "1 Combate"
+            },
+            {
+                nome: "Salmo Celestial",
+                tipo: "Passiva",
+                desc: "Ao pregar por 1 turno, limpa condições negativas em 5m. 1x por sessão, revive um aliado com 1d6 PV.",
+                dano: "Reviver",
+                cd: "1 Sessão"
+            }
+        ],
+        8: [
+            {
+                nome: "Revelação Divina",
+                tipo: "Ativa",
+                desc: "Canaliza luz por 2 turnos: Cura todos (1d12) ou causa dano em área (4d8) ou divide os dois efeitos.",
+                dano: "Cura/Dano Área",
+                cd: "1 Sessão"
+            },
+            {
+                nome: "Oração Final",
+                tipo: "Passiva",
+                desc: "Ao cair a 0 PV, abençoa o grupo (+2 Def/Vontade por 2 ataques) e pune o agressor com 2d8 sagrado.",
+                dano: "Buff/2d8 Dano",
+                cd: "1 Combate"
+            }
+        ]
     }
+    // ... outros ancestrais
+
 };
 
 // =================================================================
